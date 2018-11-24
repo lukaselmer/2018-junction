@@ -11,8 +11,8 @@ import {
 document.addEventListener('DOMContentLoaded', () => {
   console.log('start stuff...');
   start(
-    percentageFirstSpeaker,
     percentageSecondSpeaker,
+    percentageFirstSpeaker,
     secondSpeakerSwearWords,
     firstSpeakerLowConfidenceWords
   );
