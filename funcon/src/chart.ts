@@ -8,7 +8,8 @@ const chartColors = {
 export function start(
   percentageFirstSpeaker: number,
   percentageSecondSpeaker: number,
-  swearWords: Map<String, number>
+  swearWords: Map<String, number>,
+  lowConfidenceWords: Map<String, number>
 ) {
   const config = {
     type: 'pie',
@@ -68,7 +69,7 @@ export function start(
     }
   });
 
-  const LOW_CONFIDENCE_WORDS = ['i feel', 'probably', 'maybe', 'i think'];
+  const LOW_CONFIDENCE_WORDS = Array.from(lowConfidenceWords.keys());
   const lowConfidenceWordData = {
     type: 'bar',
     labels: LOW_CONFIDENCE_WORDS,
@@ -77,7 +78,7 @@ export function start(
         backgroundColor: chartColors.yellow,
         borderColor: chartColors.green,
         borderWidth: 1,
-        data: [3, 1, 2],
+        data: Array.from(lowConfidenceWords.values()),
         label: 'Frequency'
       }
     ]
@@ -88,7 +89,7 @@ export function start(
   );
   const myConfidenceBar = new Chart(confidenceBar, {
     type: 'bar',
-    data: swearWordChartData,
+    data: lowConfidenceWordData,
     options: {
       scales: {
         yAxes: [

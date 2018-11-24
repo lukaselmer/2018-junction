@@ -20,6 +20,15 @@ export const percentageSecondSpeaker = calculatePercentage(wordCountSecondSpeake
 export const firstSpeakerSwearWords = calculateWordsFrequence(firstSpeakerSentences, rudeWords);
 export const secondSpeakerSwearWords = calculateWordsFrequence(secondSpeakerSentences, rudeWords);
 
+export const firstSpeakerLowConfidenceWords = calculateWordsFrequence(
+  firstSpeakerSentences,
+  unconfidentWords
+);
+export const secondSpeakerLowConfidenceWords = calculateWordsFrequence(
+  secondSpeakerSentences,
+  unconfidentWords
+);
+
 function countWordsOfSpeaker(sentences: string[]) {
   return sentences.reduce((sum, sentence) => sum + wordCount(sentence), 0);
 }
@@ -55,31 +64,4 @@ function calculateWordsFrequence(sentences: string[], words: string[]) {
     }
   });
   return resultMap;
-}
-
-for (let i = 0; i < text.length; i++) {
-  unconfidentWords.forEach(element => {
-    const count = howManyWordAppeared(element, text[i]);
-    if (count > 0) {
-      i % 2 == 0 ? console.log('first person is shy') : console.log('second person is shy');
-      console.log(element + ' = ' + count);
-    }
-  });
-
-  rudeWords.forEach(element => {
-    const count = howManyWordAppeared(element, text[i]);
-    if (count > 0) {
-      i % 2 == 0 ? console.log('first person is rude') : console.log('second person is rude');
-    }
-  });
-
-  parasiteWords.forEach(element => {
-    const count = howManyWordAppeared(element, text[i]);
-    if (count > 0) {
-      i % 2 == 0
-        ? console.log('first person uses parasite words')
-        : console.log('second person uses parasite words');
-      console.log(element + ' = ' + count);
-    }
-  });
 }
