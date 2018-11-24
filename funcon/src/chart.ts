@@ -43,7 +43,7 @@ export function start(
     }
   };
   const ctxPie = (document.getElementById('chart-area') as HTMLCanvasElement).getContext('2d');
-  const myPie = new Chart(ctxPie, config);
+  new Chart(ctxPie, config);
 
   const SWEARWORDS = Array.from(swearWords.keys());
   const swearWordChartData = {
@@ -63,7 +63,7 @@ export function start(
   const swearWordBar = (document.getElementById('canvas-swearing') as HTMLCanvasElement).getContext(
     '2d'
   );
-  const mySwearWordBar = new Chart(swearWordBar, {
+  new Chart(swearWordBar, {
     type: 'bar',
     data: swearWordChartData,
     options: {
@@ -102,7 +102,7 @@ export function start(
   const confidenceBar = (document.getElementById('canvas-confidence') as HTMLCanvasElement).getContext(
     '2d'
   );
-  const myConfidenceBar = new Chart(confidenceBar, {
+  new Chart(confidenceBar, {
     type: 'bar',
     data: lowConfidenceWordData,
     options: {

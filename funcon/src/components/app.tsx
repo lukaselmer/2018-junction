@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { SpeakerDetector } from '../speaker_detector';
 import { TranscriptMonitor } from '../transcript-monitor';
 import { EmojiTranscript } from './emoji-transcript';
+import { Graphs } from './graphs';
 import { Transcript } from './transcript';
 
 interface S {
@@ -36,8 +37,8 @@ export class App extends Component<{}, S> {
 
   render() {
     return (
-      <div className='App'>
-        <h1 className='App-Title'>Hello Parcel x React</h1>
+      <div>
+        <h1>Hello FunCon 🎉🎉🎉</h1>
 
         <EmojiTranscript montior={this.state.transcriptMonitor} />
         <Transcript montior={this.state.transcriptMonitor} />
@@ -49,6 +50,8 @@ export class App extends Component<{}, S> {
           )}
           {this.state.recordingState === 'Started' && <button onClick={() => this.stop()}>Stop</button>}
         </div>
+
+        <Graphs />
       </div>
     );
   }
