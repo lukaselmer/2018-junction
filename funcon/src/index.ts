@@ -6,7 +6,10 @@ export function start() {
     const transcript = new Transcript();
     transcript.start(speech => console.log(speech));
     const speakerDetector = new SpeakerDetector();
-    speakerDetector.start(() => {});
+    const speakersDiv = document.getElementById('speakers') as HTMLSpanElement;
+    speakerDetector.start(frame => {
+      speakersDiv.innerText = Array.from(frame.speakerIndices).join(', ');
+    });
 
     appendStopButton(() => {
       transcript.stop();
