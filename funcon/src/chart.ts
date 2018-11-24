@@ -5,11 +5,12 @@ const chartColors = {
   green: 'rgb(75, 192, 192)'
 };
 
-export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: number) {
-  const conversationChart = (document.getElementById('chart-area') as HTMLCanvasElement).getContext(
-    '2d'
-  );
-  const conversationPieChart = new Chart(conversationChart, {
+export function start(
+  percentageFirstSpeaker: number,
+  percentageSecondSpeaker: number,
+  swearWords: Map<String, number>
+) {
+  const config = {
     type: 'pie',
     data: {
       datasets: [
@@ -24,9 +25,11 @@ export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: n
     options: {
       responsive: true
     }
-  });
+  };
+  const ctxPie = (document.getElementById('chart-area') as HTMLCanvasElement).getContext('2d');
+  const myPie = new Chart(ctxPie, config);
 
-  const SWEARWORDS = ['shit', 'fuck', 'ass'];
+  const SWEARWORDS = Array.from(swearWords.keys());
   const swearWordChartData = {
     type: 'bar',
     labels: SWEARWORDS,
@@ -35,7 +38,7 @@ export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: n
         backgroundColor: chartColors.yellow,
         borderColor: chartColors.green,
         borderWidth: 1,
-        data: [3, 1, 2],
+        data: Array.from(swearWords.values()),
         label: 'Frequency'
       }
     ]
