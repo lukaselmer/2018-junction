@@ -1,4 +1,4 @@
-import { groupBy, sortBy } from 'lodash';
+import { sortBy } from 'lodash';
 import emoji from 'node-emoji';
 import React from 'react';
 import { TranscriptMonitor } from '../transcript-monitor';
@@ -23,29 +23,28 @@ export function EmojiTranscript({ montior }: P) {
   const counts = sortBy([...new Set(favorites.map(({ count }) => count))]).reverse();
 
   return (
-    <div>
-      <div>
-        <h2>Recent Emojis</h2>
-        <div>{words.join('')}</div>
-      </div>
-      <div>
-        <h2>Favorite Emojis</h2>
-        <div>
-          {counts.map(count => (
-            <div key={count}>
-              <b>{count}</b>{' '}
-              {favorites
-                .filter(fav => fav.count === count)
-                .map(({ word }) => word)
-                .join('')}
-            </div>
-          ))}
+    <>
+      <h2>Emoji Usage</h2>
+      <div className='row'>
+        <div className='col-sm'>
+          <h2>Favorites</h2>
+          <div style={{ fontSize: '4em' }}>
+            {counts.map(count => (
+              <div key={count}>
+                <b>{count}</b>{' '}
+                {favorites
+                  .filter(fav => fav.count === count)
+                  .map(({ word }) => word)
+                  .join('')}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className='col-sm'>
+          <h2>Recent</h2>
+          <div style={{ fontSize: '2em' }}>{words.join('')}</div>
         </div>
       </div>
-    </div>
+    </>
   );
-
-  // {words.map((sentence, index) => (
-  //   <div key={index}>{sentence}</div>
-  // ))}
 }

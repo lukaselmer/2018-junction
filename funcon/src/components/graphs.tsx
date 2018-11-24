@@ -9,24 +9,20 @@ export function Graphs() {
       <div style={{ maxWidth: '900px', textAlign: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
         {drawSpeakerStatistics()}
       </div>
-      <div>
-        <h3>Rudeness</h3>
+
+      <h3>Rudeness</h3>
+      <div className='row'>
         {speakerStatistics.map(stats => (
-          <div
-            key={stats.speaker.name}
-            style={{ width: `${99.99 / speakerStatistics.length}%`, float: 'left' }}
-          >
+          <div key={stats.speaker.name} className='col-sm'>
             {drawWordStatistics(`Conversation Rudeness of ${stats.speaker.name}`, stats.rudeWords)}
           </div>
         ))}
       </div>
-      <div>
-        <h3>Conversation Confidence</h3>
+
+      <h3>Conversation Confidence</h3>
+      <div className='row'>
         {speakerStatistics.map(stats => (
-          <div
-            key={stats.speaker.name}
-            style={{ width: `${99.99 / speakerStatistics.length}%`, float: 'left' }}
-          >
+          <div key={stats.speaker.name} className='col-sm'>
             {drawWordStatistics(
               `Conversation Confidence of ${stats.speaker.name}`,
               stats.lowConfidenceWords
@@ -34,13 +30,11 @@ export function Graphs() {
           </div>
         ))}
       </div>
-      <div>
-        <h3>Parasite Word Usage</h3>
+
+      <h3>Parasite Word Usage</h3>
+      <div className='row'>
         {speakerStatistics.map(stats => (
-          <div
-            key={stats.speaker.name}
-            style={{ width: `${99.99 / speakerStatistics.length}%`, float: 'left' }}
-          >
+          <div key={stats.speaker.name} className='col-sm'>
             {drawWordStatistics(`Parasite Words of ${stats.speaker.name}`, stats.parasiteWords)}
           </div>
         ))}
@@ -52,7 +46,6 @@ export function Graphs() {
 function drawSpeakerStatistics() {
   return (
     <>
-      <h2 className='feedback-title'>Your Conversation Feedback</h2>
       <h3 className='feedback-title'>Participation</h3>
       <Pie
         data={{

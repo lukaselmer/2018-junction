@@ -10,6 +10,7 @@ interface S {
   speakerDetector: SpeakerDetector;
   recordingState: 'Started' | 'Stopped';
   lastUpdate: Date;
+  showTranscript: boolean;
 }
 
 export class App extends Component<{}, S> {
@@ -20,7 +21,8 @@ export class App extends Component<{}, S> {
       transcriptMonitor: new TranscriptMonitor(),
       speakerDetector: new SpeakerDetector(),
       recordingState: 'Started',
-      lastUpdate: new Date()
+      lastUpdate: new Date(),
+      showTranscript: true
     };
     this.state.transcriptMonitor.addListener(speech => console.log(speech));
     this.state.transcriptMonitor.addListener(() => this.setState({ lastUpdate: new Date() }));
@@ -37,19 +39,25 @@ export class App extends Component<{}, S> {
 
   render() {
     return (
-      <div>
+      <div className='container'>
         <h1>Hello FunCon 🎉🎉🎉</h1>
 
         <EmojiTranscript montior={this.state.transcriptMonitor} />
-        <Transcript montior={this.state.transcriptMonitor} />
-
-        <div style={{ background: this.state.recordingState === 'Started' ? '#A3E4D7' : '#EAEDED' }}>
-          <div>{this.state.recordingState}</div>
-          {this.state.recordingState === 'Stopped' && (
-            <button onClick={() => this.start()}>Start</button>
-          )}
-          {this.state.recordingState === 'Started' && <button onClick={() => this.stop()}>Stop</button>}
+        <div
+          className={`transcript-text-overlay ${this.state.showTranscript ? 'open' : 'closed'}`}
+          onClick={() => this.setState({ showTranscript: !this.state.showTranscript })}
+        >
+          <Transcript montior={this.state.transcriptMonitor} />
         </div>
+
+        <button
+          className={`start-stop-button ${
+            this.state.recordingState === 'Started' ? 'started' : 'stopped'
+          }`}
+          onClick={() => (this.state.recordingState === 'Stopped' ? this.start() : this.stop())}
+        >
+          {this.state.recordingState === 'Stopped' ? 'Start' : 'Stop'}
+        </button>
 
         <Graphs />
       </div>

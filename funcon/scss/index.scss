@@ -1,7 +1,57 @@
-body {
+body,
+* {
   font-family: 'Roboto', sans-serif;
 }
 
-.feedback-title {
+.start-stop-button {
+  color: #fff;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  border-radius: 100%;
+  border: 10px solid;
+  width: 80px;
+  height: 80px;
   text-align: center;
+  font-weight: bold;
+  z-index: 2;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.started {
+    background: #e74c3c;
+    border-color: #e74c3c;
+  }
+
+  &.stopped {
+    background: #2e86c1;
+    border-color: #2e86c1;
+  }
+}
+
+.transcript-text-overlay {
+  .transcript-text {
+    z-index: 1;
+    font-weight: 300;
+    font-size: 0.8em;
+    position: fixed;
+    padding: 4px 8px;
+    width: 23%;
+    right: 0;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    top: 0;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  &.closed {
+    .transcript-text {
+      width: 15px;
+      color: transparent;
+      outline: dotted rgba(0, 0, 0, 0.7) 7px;
+    }
+  }
 }

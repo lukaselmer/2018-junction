@@ -7,7 +7,7 @@ interface P {
 
 export function Transcript({ montior }: P) {
   return (
-    <div>
+    <div className='transcript-text'>
       {[...montior.conversation].reverse().map((sentence, index) => (
         <div key={index}>{sentence}</div>
       ))}
