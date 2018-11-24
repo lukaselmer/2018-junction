@@ -5,7 +5,12 @@ const numberOfChannels = 1;
 const speakerDbRangeHalf = 5;
 const voiceDbThreshold = -25;
 
-export type FrameCallback = (speakerIndices: Set<number>) => void;
+export interface FrameEvent {
+  timeStamp: number;
+  speakerIndices: Set<number>;
+}
+
+export type FrameCallback = (event: FrameEvent) => void;
 
 export class SpeakerDetector {
   async start(onFrame: FrameCallback) {
@@ -54,7 +59,10 @@ export class SpeakerDetector {
           speakers.add(detector.getOrAddSpeakerIndex(value));
         }
       });
-      onFrame(speakers);
+      onFrame({
+        timeStamp: e.timeStamp,
+        speakerIndices: speakers
+      });
     };
   }
 }
