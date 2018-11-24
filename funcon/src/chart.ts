@@ -6,11 +6,7 @@ const chartColors = {
 };
 
 export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: number) {
-  let randomScalingFactor = function() {
-    return Math.round(Math.random() * 100);
-  };
-
-  let config = {
+  const config = {
     type: 'pie',
     data: {
       datasets: [
@@ -20,15 +16,50 @@ export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: n
           label: 'Dataset 1'
         }
       ],
-      labels: ['Yellow', 'Green']
+      labels: ['You', 'Katarina']
     },
     options: {
       responsive: true
     }
   };
 
-  let ctx = (document.getElementById('chart-area') as HTMLCanvasElement).getContext('2d');
-  const myPie = new Chart(ctx, config);
+  const ctxPie = (document.getElementById('chart-area') as HTMLCanvasElement).getContext('2d');
+  const myPie = new Chart(ctxPie, config);
 
-  let colorNames = Object.keys(chartColors);
+  const SWEARWORDS = ['shit', 'fuck', 'ass'];
+  const barChartData = {
+    type: 'bar',
+    labels: SWEARWORDS,
+    datasets: [
+      {
+        backgroundColor: chartColors.yellow,
+        borderColor: chartColors.green,
+        borderWidth: 1,
+        data: [3, 1, 2],
+        label: 'Frequency'
+      }
+    ]
+  };
+
+  const ctxBar = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
+  const myBar = new Chart(ctxBar, {
+    type: 'bar',
+    data: barChartData,
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      },
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Swearwords'
+      }
+    }
+  });
 }
