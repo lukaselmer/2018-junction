@@ -12,17 +12,17 @@ export type FrameCallback = (event: FrameEvent) => void;
 
 export class SpeakerDetector {
   async start(onFrame: FrameCallback) {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 
     const context = new AudioContext();
-    const source = context.createMediaStreamSource(stream);
-    this.processor = context.createScriptProcessor(1024, numberOfChannels, numberOfChannels);
+    const source = context.createMediaStreamSource(this.mediaStream);
+    const processor = context.createScriptProcessor(1024, numberOfChannels, numberOfChannels);
 
-    source.connect(this.processor);
-    this.processor.connect(context.destination);
+    source.connect(processor);
+    processor.connect(context.destination);
 
     const detector = this;
-    this.processor.onaudioprocess = function(e) {
+    processor.onaudioprocess = function(e) {
       console.assert(
         e.inputBuffer.numberOfChannels == numberOfChannels,
         'Unexpected number of channels in the input buffer'
@@ -52,7 +52,7 @@ export class SpeakerDetector {
     };
   }
 
-  private processor: ScriptProcessorNode | null = null;
+  private mediaStream: MediaStream | null = null;
 
   private debug_drawCharts(pcmData: Float32Array, fftData: number[]) {
     const getClearCanvasAndContext = (name: string) => {
@@ -93,9 +93,10 @@ export class SpeakerDetector {
   }
 
   stop() {
-    if (!this.processor) {
+    if (!this.mediaStream) {
       throw new Error('Audio processor not set. Trying to stop when already stopped?');
     }
-    this.processor.disconnect();
+    this.mediaStream.getAudioTracks().forEach(track => track.stop());
+    this.mediaStream = null;
   }
 }
