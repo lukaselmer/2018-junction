@@ -73,7 +73,7 @@ export class SpeakerDetector {
       }
 
       // Clear the canvas [sic!].
-      canvas.width = window.innerWidth;
+      canvas.width = window.innerWidth >> 1;
       context.moveTo(0, 0);
 
       return {
