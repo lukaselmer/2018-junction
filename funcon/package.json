@@ -20,16 +20,13 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
+    "chart.js": "^2.7.3",
     "fourier-transform": "^1.1.2",
     "lodash": "^4.17.11",
     "mfcc": "^0.0.3",
     "node-emoji": "^1.8.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "tslib": "^1.9.3",
-    "chart.js": "^2.7.3",
-    "decibels": "^2.0.0",
-    "e": "^0.0.4",
-    "mfcc": "^0.0.3"
+    "tslib": "^1.9.3"
   }
 }
