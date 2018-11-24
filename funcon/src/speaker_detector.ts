@@ -18,7 +18,11 @@ export class SpeakerDetector {
 
     const context = new AudioContext();
     const source = context.createMediaStreamSource(this.mediaStream);
-    this.mediaStreamProcessor = context.createScriptProcessor(1024, numberOfChannels, numberOfChannels);
+    this.mediaStreamProcessor = context.createScriptProcessor(
+      1024, // * 16,
+      numberOfChannels,
+      numberOfChannels
+    );
 
     source.connect(this.mediaStreamProcessor);
     this.mediaStreamProcessor.connect(context.destination);
@@ -31,14 +35,18 @@ export class SpeakerDetector {
 
       const channelData = e.inputBuffer.getChannelData(0);
       const spectrum: number[] = fourierTransform(channelData);
+      console.assert(
+        spectrum.length == channelData.length >> 1,
+        'Wrong FFT spectrum size: ' + spectrum.length
+      );
 
-      const singleFrequencyStep = e.inputBuffer.sampleRate / channelData.length;
+      const singleFrequencyStep = 0.5 / e.inputBuffer.duration;
       const humanSpectrum = spectrum.slice(
         Math.floor(humanVoiceFrequencyMin / singleFrequencyStep),
         Math.ceil(humanVoiceFrequencyMax / singleFrequencyStep)
       );
 
-      this.debug_drawCharts(channelData, humanSpectrum.map(v => v * 3));
+      this.debug_drawCharts(channelData, humanSpectrum.map(v => v * (humanSpectrum.length >> 8)));
 
       const mel = mfcc.construct(
         spectrum.length, // Number of expected FFT magnitudes
@@ -90,11 +98,12 @@ export class SpeakerDetector {
     );
     pcm.ctx.stroke();
 
-    const fftBarWidth = fft.el.width / fftData.length;
+    const fftBarWidth = fft.el.width / fftData.length,
+      fftTickStep = Math.floor(50 / fftBarWidth);
     fftData.forEach((value, index) => {
       const y = fft.el.height * (1 - value);
       fft.ctx.lineTo(fftBarWidth * index, y);
-      if (!(index % 5)) {
+      if (!(index % fftTickStep)) {
         fft.ctx.strokeText(index.toString(), fftBarWidth * (index + 0.5), 10);
       }
       fft.ctx.lineTo(fftBarWidth * (index + 1), y);
