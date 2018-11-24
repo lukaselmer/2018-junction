@@ -1,9 +1,24 @@
 import { Chart } from 'chart.js';
 
 const chartColors = {
+  red: 'rgb(255, 99, 132)',
+  orange: 'rgb(255, 159, 64)',
   yellow: 'rgb(255, 205, 86)',
-  green: 'rgb(75, 192, 192)'
+  green: 'rgb(75, 192, 192)',
+  blue: 'rgb(54, 162, 235)',
+  purple: 'rgb(153, 102, 255)',
+  grey: 'rgb(201, 203, 207)'
 };
+
+function countBackgroundColors(data: Map<String, number>) {
+  const chartBackgroundColor: string[] = [];
+  data.forEach(count =>
+    count > 2
+      ? chartBackgroundColor.push(chartColors.red)
+      : chartBackgroundColor.push(chartColors.yellow)
+  );
+  return chartBackgroundColor;
+}
 
 export function start(
   percentageFirstSpeaker: number,
@@ -36,7 +51,7 @@ export function start(
     labels: SWEARWORDS,
     datasets: [
       {
-        backgroundColor: chartColors.yellow,
+        backgroundColor: countBackgroundColors(swearWords),
         borderColor: chartColors.green,
         borderWidth: 1,
         data: Array.from(swearWords.values()),
@@ -75,7 +90,7 @@ export function start(
     labels: LOW_CONFIDENCE_WORDS,
     datasets: [
       {
-        backgroundColor: chartColors.yellow,
+        backgroundColor: countBackgroundColors(lowConfidenceWords),
         borderColor: chartColors.green,
         borderWidth: 1,
         data: Array.from(lowConfidenceWords.values()),
