@@ -59,8 +59,8 @@ export class SpeakerDetector {
     };
   }
 
-  private mediaStream: MediaStream | null = null;
-  private mediaStreamProcessor: ScriptProcessorNode | null = null;
+  private mediaStream: MediaStream | undefined;
+  private mediaStreamProcessor: ScriptProcessorNode | undefined;
 
   private debug_drawCharts(pcmData: Float32Array, fftData: number[]) {
     const getClearCanvasAndContext = (name: string) => {
@@ -105,11 +105,11 @@ export class SpeakerDetector {
       throw new Error('Audio processor not set. Trying to stop when already stopped?');
     }
     this.mediaStream.getAudioTracks().forEach(track => track.stop());
-    this.mediaStream = null;
+    this.mediaStream = undefined;
 
-    if (this.mediaStreamProcessor != null) {
+    if (this.mediaStreamProcessor) {
       this.mediaStreamProcessor.disconnect();
-      this.mediaStreamProcessor = null;
+      this.mediaStreamProcessor = undefined;
     }
   }
 }
