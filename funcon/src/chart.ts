@@ -6,7 +6,10 @@ const chartColors = {
 };
 
 export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: number) {
-  const config = {
+  const conversationChart = (document.getElementById('chart-area') as HTMLCanvasElement).getContext(
+    '2d'
+  );
+  const conversationPieChart = new Chart(conversationChart, {
     type: 'pie',
     data: {
       datasets: [
@@ -21,13 +24,10 @@ export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: n
     options: {
       responsive: true
     }
-  };
-
-  const ctxPie = (document.getElementById('chart-area') as HTMLCanvasElement).getContext('2d');
-  const myPie = new Chart(ctxPie, config);
+  });
 
   const SWEARWORDS = ['shit', 'fuck', 'ass'];
-  const barChartData = {
+  const swearWordChartData = {
     type: 'bar',
     labels: SWEARWORDS,
     datasets: [
@@ -41,10 +41,12 @@ export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: n
     ]
   };
 
-  const ctxBar = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
-  const myBar = new Chart(ctxBar, {
+  const swearWordBar = (document.getElementById('canvas-swearing') as HTMLCanvasElement).getContext(
+    '2d'
+  );
+  const mySwearWordBar = new Chart(swearWordBar, {
     type: 'bar',
-    data: barChartData,
+    data: swearWordChartData,
     options: {
       scales: {
         yAxes: [
@@ -58,7 +60,46 @@ export function start(percentageFirstSpeaker: number, percentageSecondSpeaker: n
       responsive: true,
       title: {
         display: true,
-        text: 'Swearwords'
+        text: 'Conversation Rudeness'
+      }
+    }
+  });
+
+  const LOW_CONFIDENCE_WORDS = ['i feel', 'probably', 'maybe', 'i think'];
+  const lowConfidenceWordData = {
+    type: 'bar',
+    labels: LOW_CONFIDENCE_WORDS,
+    datasets: [
+      {
+        backgroundColor: chartColors.yellow,
+        borderColor: chartColors.green,
+        borderWidth: 1,
+        data: [3, 1, 2],
+        label: 'Frequency'
+      }
+    ]
+  };
+
+  const confidenceBar = (document.getElementById('canvas-confidence') as HTMLCanvasElement).getContext(
+    '2d'
+  );
+  const myConfidenceBar = new Chart(confidenceBar, {
+    type: 'bar',
+    data: swearWordChartData,
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      },
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Conversation Confidence'
       }
     }
   });
