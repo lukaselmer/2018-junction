@@ -16,13 +16,13 @@ export class SpeakerDetector {
 
     const context = new AudioContext();
     const source = context.createMediaStreamSource(this.mediaStream);
-    const processor = context.createScriptProcessor(1024, numberOfChannels, numberOfChannels);
+    this.mediaStreamProcessor = context.createScriptProcessor(1024, numberOfChannels, numberOfChannels);
 
-    source.connect(processor);
-    processor.connect(context.destination);
+    source.connect(this.mediaStreamProcessor);
+    this.mediaStreamProcessor.connect(context.destination);
 
     const detector = this;
-    processor.onaudioprocess = function(e) {
+    this.mediaStreamProcessor.onaudioprocess = function(e) {
       console.assert(
         e.inputBuffer.numberOfChannels == numberOfChannels,
         'Unexpected number of channels in the input buffer'
@@ -53,6 +53,7 @@ export class SpeakerDetector {
   }
 
   private mediaStream: MediaStream | null = null;
+  private mediaStreamProcessor: ScriptProcessorNode | null = null;
 
   private debug_drawCharts(pcmData: Float32Array, fftData: number[]) {
     const getClearCanvasAndContext = (name: string) => {
@@ -98,5 +99,10 @@ export class SpeakerDetector {
     }
     this.mediaStream.getAudioTracks().forEach(track => track.stop());
     this.mediaStream = null;
+
+    if (this.mediaStreamProcessor != null) {
+      this.mediaStreamProcessor.disconnect();
+      this.mediaStreamProcessor = null;
+    }
   }
 }
