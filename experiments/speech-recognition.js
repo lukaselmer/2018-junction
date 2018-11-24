@@ -6,8 +6,19 @@ function start() {
     console.log(' - onstart');
   };
 
-  recognition.onspeechend = function() {
+  recognition.onspeechend = function(e) {
     console.log(' - onspeechend');
+    console.log(e);
+  };
+
+  recognition.onsoundend = function(e) {
+    console.log(' - onsoundend');
+    console.log(e);
+  };
+
+  recognition.onaudioend = function(e) {
+    console.log(' - onaudioend');
+    console.log(e);
   };
 
   recognition.onerror = function(event) {
@@ -17,18 +28,20 @@ function start() {
 
   recognition.continuous = false;
   // recognition.interimResults = true;
-  recognition.maxAlternatives = 3;
+  recognition.maxAlternatives = 1;
 
   recognition.onresult = function(event) {
     // Get a transcript of what was said.
     // var transcript = event.results[current][0].transcript;
-    console.table(event.results[event.resultIndex]);
+    const result = event.results[event.resultIndex][0];
 
     // Add the current transcript to the contents of our Note.
-    // console.log(transcript);
+    console.table(result);
   };
 
-  recognition.onend = function() {
+  recognition.onend = function(e) {
+    console.log(' - onend');
+    console.log(e);
     recognition.start();
   };
 
