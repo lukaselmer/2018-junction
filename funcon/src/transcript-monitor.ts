@@ -36,8 +36,6 @@ export class TranscriptMonitor {
   }
 
   start() {
-    console.log(this.conversation.length);
-    console.log(this.conversation);
     this.conversation.splice(0, this.conversation.length);
     this.continueListening = true;
     if (this.isListening) return;
