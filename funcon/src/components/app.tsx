@@ -63,7 +63,10 @@ export class App extends Component<{}, S> {
 
   private startListenting() {
     this.state.transcriptMonitor.start();
-    this.state.speakerDetector.start(() => {});
+    this.state.speakerDetector.start(speakers => {
+      const speakersElement = document.getElementById('speakers') as HTMLSpanElement;
+      speakersElement.innerText = [...speakers.speakerIndices].join(', ');
+    });
     // @ts-ignore
     // monitor(this.state.speakerDetector);
     // this.state.speakerDetector.start(frame => console.log([...frame.speakerIndices].join(', ')));

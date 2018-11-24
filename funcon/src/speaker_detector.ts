@@ -3,7 +3,10 @@ import mfcc from 'mfcc/src/mfcc';
 
 const numberOfChannels = 1;
 const humanVoiceFrequencyMin = 200;
-const humanVoiceFrequencyMax = 8000;
+const humanVoiceFrequencyMax = 2000;
+
+const femaleVoiceThreshold = 25000;
+const voiceThreshold = 15000;
 
 export interface FrameEvent {
   timeStamp: number;
@@ -43,10 +46,17 @@ export class SpeakerDetector {
       const singleFrequencyStep = 0.5 / e.inputBuffer.duration;
       const humanSpectrum = spectrum.slice(
         Math.floor(humanVoiceFrequencyMin / singleFrequencyStep),
-        Math.ceil(humanVoiceFrequencyMax / singleFrequencyStep)
+        Math.ceil((humanVoiceFrequencyMax - humanVoiceFrequencyMin) / singleFrequencyStep)
       );
+      console.log(humanSpectrum);
 
-      this.debug_drawCharts(channelData, humanSpectrum.map(v => v * (humanSpectrum.length >> 8)));
+      this.debug_drawCharts(channelData, humanSpectrum.map(v => v * (humanSpectrum.length >> 5)));
+
+      if (this.model) {
+        const xs = tf.tensor2d([...humanSpectrum.keys()]);
+        const ys = tf.tensor2d(humanSpectrum);
+        this.model.fit(xs, ys);
+      }
 
       const mel = mfcc.construct(
         spectrum.length, // Number of expected FFT magnitudes
@@ -56,9 +66,19 @@ export class SpeakerDetector {
         e.inputBuffer.sampleRate
       );
 
-      // detector.debug_drawCharts(channelData, mel(spectrum).map(v => (v + 3) / 6));
-
       const speakers = new Set<number>();
+
+      const humanSpectrumMax = Math.max(...humanSpectrum);
+      const weightedFrequency = humanSpectrum.reduce(
+        (acc, value, index) => acc + (value / humanSpectrumMax) * index * index
+      );
+
+      if (weightedFrequency > femaleVoiceThreshold) {
+        speakers.add(1);
+      } else if (weightedFrequency > voiceThreshold) {
+        speakers.add(0);
+      }
+
       onFrame({
         timeStamp: e.timeStamp,
         speakerIndices: speakers
