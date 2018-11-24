@@ -1,8 +1,7 @@
 import fourierTransform from 'fourier-transform';
+import mfcc from 'mfcc/src/mfcc';
 
 const numberOfChannels = 1;
-const speakerDbRangeHalf = 5;
-const voiceDbThreshold = -25;
 
 export interface FrameEvent {
   timeStamp: number;
@@ -32,8 +31,18 @@ export class SpeakerDetector {
       const channelData = e.inputBuffer.getChannelData(0);
       const spectrum: number[] = fourierTransform(channelData);
 
-      const subSpectrum = spectrum.slice(0, spectrum.length / 30);
+      const subSpectrum = spectrum.slice(0, spectrum.length / 10);
       detector.debug_drawCharts(channelData, subSpectrum.map(v => v * 3));
+
+      const mel = mfcc.construct(
+        spectrum.length, // Number of expected FFT magnitudes
+        20, // Number of Mel filter banks
+        300, // Low frequency cutoff
+        3400, // High frequency cutoff
+        e.inputBuffer.sampleRate
+      );
+
+      // detector.debug_drawCharts(channelData, mel(spectrum).map(v => (v + 3) / 6));
 
       const speakers = new Set<number>();
       onFrame({
