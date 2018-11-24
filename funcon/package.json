@@ -1,0 +1,17 @@
+{
+  "name": "funcon",
+  "version": "1.0.0",
+  "description": "Fun conversations",
+  "main": "index.js",
+  "repository": "https://github.com/lukaselmer/2018-junction",
+  "author": "Multiple",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.10.3",
+    "typescript": "^3.1.6"
+  }
+}
