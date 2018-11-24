@@ -23,8 +23,7 @@ export class SpeakerDetector {
     source.connect(this.mediaStreamProcessor);
     this.mediaStreamProcessor.connect(context.destination);
 
-    const detector = this;
-    this.mediaStreamProcessor.onaudioprocess = function(e) {
+    this.mediaStreamProcessor.onaudioprocess = e => {
       console.assert(
         e.inputBuffer.numberOfChannels == numberOfChannels,
         'Unexpected number of channels in the input buffer'
@@ -39,7 +38,7 @@ export class SpeakerDetector {
         Math.ceil(humanVoiceFrequencyMax / singleFrequencyStep)
       );
 
-      detector.debug_drawCharts(channelData, humanSpectrum.map(v => v * 3));
+      this.debug_drawCharts(channelData, humanSpectrum.map(v => v * 3));
 
       const mel = mfcc.construct(
         spectrum.length, // Number of expected FFT magnitudes
