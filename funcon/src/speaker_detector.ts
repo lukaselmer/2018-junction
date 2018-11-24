@@ -90,7 +90,7 @@ export class SpeakerDetector {
       const channelData = e.inputBuffer.getChannelData(0);
       const spectrum: number[] = fourierTransform(channelData);
 
-      detector.debug_drawCharts(channelData, spectrum.slice(0, spectrum.length / 10));
+      detector.debug_drawCharts(channelData, spectrum.slice(0, spectrum.length / 10).map(v => v * 3));
 
       const dbs = spectrum.map(value => decibels.fromGain(value));
 
