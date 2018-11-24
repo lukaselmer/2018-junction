@@ -1,36 +1,43 @@
-// @ts-ignore
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+function start() {
+  // @ts-ignore
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
-recognition.onstart = function() {
-  console.log('Voice recognition activated. Try speaking into the microphone.');
-};
+  recognition.onstart = function() {
+    console.log('Voice recognition activated. Try speaking into the microphone.');
+  };
 
-recognition.onspeechend = function() {
-  console.log('You were quiet for a while so voice recognition turned itself off.');
+  recognition.onspeechend = function() {
+    console.log('You were quiet for a while so voice recognition turned itself off.');
+  };
 
-  noteContent = '';
-  setTimeout(() => recognition.start(), 10);
-};
+  recognition.onerror = function(event) {
+    if (event.error === 'no-speech') console.log('No speech was detected. Try again.');
+    else console.log(event);
+  };
 
-recognition.onerror = function(event) {
-  if (event.error === 'no-speech') console.log('No speech was detected. Try again.');
-  else console.log(event);
-};
+  recognition.continuous = false;
+  // recognition.interimResults = true;
+  // recognition.maxAlternatives = 1;
 
-let noteContent = '';
+  recognition.onresult = function(event) {
+    console.log('onresult');
+    // event is a SpeechRecognitionEvent object.
+    // It holds all the lines we have captured so far.
+    // We only need the current one.
+    var current = event.resultIndex;
 
-recognition.onresult = function(event) {
-  // event is a SpeechRecognitionEvent object.
-  // It holds all the lines we have captured so far.
-  // We only need the current one.
-  var current = event.resultIndex;
+    // Get a transcript of what was said.
+    var transcript = event.results[current][0].transcript;
 
-  // Get a transcript of what was said.
-  var transcript = event.results[current][0].transcript;
+    // Add the current transcript to the contents of our Note.
+    console.log(transcript);
+  };
 
-  // Add the current transcript to the contents of our Note.
-  noteContent += transcript;
-  console.log(noteContent);
-};
+  recognition.onend = function() {
+    recognition.start();
+  };
 
-recognition.start();
+  recognition.start();
+}
+
+start();
