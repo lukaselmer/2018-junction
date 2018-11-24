@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { SpeakerDetector } from '../speaker_detector';
 import { TranscriptMonitor } from '../transcript-monitor';
+import { EmojiTranscript } from './emoji-transcript';
 import { Transcript } from './transcript';
 
 interface S {
@@ -38,6 +39,7 @@ export class App extends Component<{}, S> {
       <div className='App'>
         <h1 className='App-Title'>Hello Parcel x React</h1>
 
+        <EmojiTranscript montior={this.state.transcriptMonitor} />
         <Transcript montior={this.state.transcriptMonitor} />
 
         <div style={{ background: this.state.recordingState === 'Started' ? '#A3E4D7' : '#EAEDED' }}>
