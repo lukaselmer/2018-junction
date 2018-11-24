@@ -34,7 +34,6 @@ export class SpeakerDetector {
   }
 
   private handleSuccess(stream: MediaStream, onFrame: FrameCallback) {
-    // TODO(dotdoom): cross-browser compatibility.
     const context = new AudioContext();
     const source = context.createMediaStreamSource(stream);
     const processor = context.createScriptProcessor(1024, numberOfChannels, numberOfChannels);
