@@ -2,8 +2,8 @@ import decibels from 'decibels';
 import fourierTransform from 'fourier-transform';
 
 const numberOfChannels = 1;
-const speakerDbRange = 20;
-const voiceDbThreshold = -30;
+const speakerDbRangeHalf = 5;
+const voiceDbThreshold = -25;
 
 export type FrameCallback = (speakerIndices: Set<number>) => void;
 
@@ -18,7 +18,7 @@ export class SpeakerDetector {
 
   private getOrAddSpeakerIndex(db: number) {
     const existingIndex = this.speakerAverageDb.findIndex(
-      value => db >= value - speakerDbRange / 2 || db <= value + speakerDbRange / 2
+      averageDb => db >= averageDb - speakerDbRangeHalf && db <= averageDb + speakerDbRangeHalf
     );
 
     if (existingIndex == -1) {
