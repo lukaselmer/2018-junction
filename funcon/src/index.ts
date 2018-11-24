@@ -1,10 +1,17 @@
+import { SpeakerDetector } from './speaker_detector';
 import { Transcript } from './transcript';
 
 export function start() {
   document.addEventListener('DOMContentLoaded', () => {
     const transcript = new Transcript();
     transcript.start(speech => console.log(speech));
-    appendStopButton(() => transcript.stop());
+    const speakerDetector = new SpeakerDetector();
+    speakerDetector.start(() => {});
+
+    appendStopButton(() => {
+      transcript.stop();
+      speakerDetector.stop();
+    });
   });
 }
 
