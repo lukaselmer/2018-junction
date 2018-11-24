@@ -20,31 +20,7 @@ function countBackgroundColors(data: Map<String, number>) {
   return chartBackgroundColor;
 }
 
-export function start(
-  percentageFirstSpeaker: number,
-  percentageSecondSpeaker: number,
-  swearWords: Map<String, number>,
-  lowConfidenceWords: Map<String, number>
-) {
-  const config = {
-    type: 'pie',
-    data: {
-      datasets: [
-        {
-          data: [percentageFirstSpeaker, percentageSecondSpeaker],
-          backgroundColor: [chartColors.yellow, chartColors.green],
-          label: 'Dataset 1'
-        }
-      ],
-      labels: ['You', 'Katarina']
-    },
-    options: {
-      responsive: true
-    }
-  };
-  const ctxPie = (document.getElementById('chart-area') as HTMLCanvasElement).getContext('2d');
-  new Chart(ctxPie, config);
-
+export function start(swearWords: Map<String, number>, lowConfidenceWords: Map<String, number>) {
   const SWEARWORDS = Array.from(swearWords.keys());
   const swearWordChartData = {
     type: 'bar',
