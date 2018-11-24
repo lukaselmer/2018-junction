@@ -1,6 +1,5 @@
 // @ts-ignore
-var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-// var speechRecognitionList = new SpeechGrammarList();
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
 recognition.onstart = function() {
   console.log('Voice recognition activated. Try speaking into the microphone.');
