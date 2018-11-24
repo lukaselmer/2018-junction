@@ -94,6 +94,9 @@ export class SpeakerDetector {
     fftData.forEach((value, index) => {
       const y = fft.el.height * (1 - value);
       fft.ctx.lineTo(fftBarWidth * index, y);
+      if (!(index % 5)) {
+        fft.ctx.strokeText(index.toString(), fftBarWidth * (index + 0.5), 10);
+      }
       fft.ctx.lineTo(fftBarWidth * (index + 1), y);
     });
     fft.ctx.stroke();
