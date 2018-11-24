@@ -1,19 +1,20 @@
-import { start } from './chart';
+import React from 'react';
+
+import { start } from '../chart';
 import {
   firstSpeakerLowConfidenceWords,
-  firstSpeakerSwearWords,
   percentageFirstSpeaker,
   percentageSecondSpeaker,
-  secondSpeakerLowConfidenceWords,
   secondSpeakerSwearWords
-} from './text-analysis';
+} from '../text-analysis';
 
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('start stuff...');
+export function Graphs() {
   start(
     percentageSecondSpeaker,
     percentageFirstSpeaker,
     secondSpeakerSwearWords,
     firstSpeakerLowConfidenceWords
   );
-});
+
+  return <h1 className='title'>Your Conversation Feedback</h1>;
+}

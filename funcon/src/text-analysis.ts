@@ -17,17 +17,17 @@ const totalNumberOfWords = wordCountFirstSpeaker + wordCountSecondSpeaker;
 export const percentageFirstSpeaker = calculatePercentage(wordCountFirstSpeaker, totalNumberOfWords);
 export const percentageSecondSpeaker = calculatePercentage(wordCountSecondSpeaker, totalNumberOfWords);
 
-export const firstSpeakerSwearWords = calculateWordsFrequence(firstSpeakerSentences, rudeWords);
+// currently unused: export const firstSpeakerSwearWords = calculateWordsFrequence(firstSpeakerSentences, rudeWords);
 export const secondSpeakerSwearWords = calculateWordsFrequence(secondSpeakerSentences, rudeWords);
 
 export const firstSpeakerLowConfidenceWords = calculateWordsFrequence(
   firstSpeakerSentences,
   unconfidentWords
 );
-export const secondSpeakerLowConfidenceWords = calculateWordsFrequence(
-  secondSpeakerSentences,
-  unconfidentWords
-);
+// currently unused: export const secondSpeakerLowConfidenceWords = calculateWordsFrequence(
+//   secondSpeakerSentences,
+//   unconfidentWords
+// );
 
 function countWordsOfSpeaker(sentences: string[]) {
   return sentences.reduce((sum, sentence) => sum + wordCount(sentence), 0);
