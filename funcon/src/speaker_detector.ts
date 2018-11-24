@@ -48,15 +48,6 @@ export class SpeakerDetector {
         Math.floor(humanVoiceFrequencyMin / singleFrequencyStep),
         Math.ceil((humanVoiceFrequencyMax - humanVoiceFrequencyMin) / singleFrequencyStep)
       );
-      console.log(humanSpectrum);
-
-      this.debug_drawCharts(channelData, humanSpectrum.map(v => v * (humanSpectrum.length >> 5)));
-
-      if (this.model) {
-        const xs = tf.tensor2d([...humanSpectrum.keys()]);
-        const ys = tf.tensor2d(humanSpectrum);
-        this.model.fit(xs, ys);
-      }
 
       const mel = mfcc.construct(
         spectrum.length, // Number of expected FFT magnitudes
@@ -68,15 +59,12 @@ export class SpeakerDetector {
 
       const speakers = new Set<number>();
 
-      const humanSpectrumMax = Math.max(...humanSpectrum);
-      const weightedFrequency = humanSpectrum.reduce(
-        (acc, value, index) => acc + (value / humanSpectrumMax) * index * index
+      const analysisSpeaker = this.debug_drawCharts(
+        channelData,
+        humanSpectrum.map(v => v * (humanSpectrum.length >> 4))
       );
-
-      if (weightedFrequency > femaleVoiceThreshold) {
-        speakers.add(1);
-      } else if (weightedFrequency > voiceThreshold) {
-        speakers.add(0);
+      if (analysisSpeaker >= 0) {
+        speakers.add(analysisSpeaker);
       }
 
       onFrame({
@@ -88,9 +76,11 @@ export class SpeakerDetector {
 
   private mediaStream: MediaStream | undefined;
   private mediaStreamProcessor: ScriptProcessorNode | undefined;
+  private imprintIndex = 0;
+  private imprintDirection = 1;
 
   private debug_drawCharts(pcmData: Float32Array, fftData: number[]) {
-    const getClearCanvasAndContext = (name: string) => {
+    const getCanvasAndContext = (name: string, shouldClear: boolean) => {
       const canvas = document.getElementById(name) as HTMLCanvasElement | null;
       if (!canvas) {
         throw new Error('Cannot find an element for canvas ' + name);
@@ -100,9 +90,12 @@ export class SpeakerDetector {
         throw new Error('Cannot get a context of canvas ' + name);
       }
 
-      // Clear the canvas [sic!].
-      canvas.width = window.innerWidth >> 1;
-      context.moveTo(0, 0);
+      const expectedWidth = window.innerWidth >> 1;
+      if (shouldClear || canvas.width != expectedWidth) {
+        // Clear the canvas [sic!].
+        canvas.width = expectedWidth;
+        context.moveTo(0, 0);
+      }
 
       return {
         el: canvas,
@@ -110,16 +103,61 @@ export class SpeakerDetector {
       };
     };
 
-    const pcm = getClearCanvasAndContext('pcm'),
-      fft = getClearCanvasAndContext('fft');
+    const setPixel = (canvas: CanvasRenderingContext2D, x, y, intencity: number) => {
+      const pixel = canvas.createImageData(1, 1);
+      const pixelData = pixel.data;
+
+      let totalIntencity = (intencity + 0.5) * 255 * 3;
+      pixelData[0] = Math.max(Math.ceil((totalIntencity -= 255)), 0);
+      pixelData[1] = Math.max(Math.ceil((totalIntencity -= 255)), 0);
+      pixelData[2] = Math.max(Math.ceil((totalIntencity -= 255)), 0);
+      pixelData[3] = 255;
+      canvas.putImageData(pixel, x, y);
+    };
+
+    const pcm = getCanvasAndContext('pcm', true),
+      fft = getCanvasAndContext('fft', true),
+      imprint = getCanvasAndContext('imprint', false);
 
     pcmData.forEach((value, index) =>
       pcm.ctx.lineTo((pcm.el.width / pcmData.length) * index, ((value + 1) / 2) * pcm.el.height)
     );
     pcm.ctx.stroke();
 
+    this.imprintIndex += this.imprintDirection;
+    if (this.imprintIndex < 0) {
+      this.imprintIndex = 0;
+      this.imprintDirection = 1;
+    } else if (this.imprintIndex > 500) {
+      this.imprintDirection = -1;
+    }
+    if (imprint.el.height != fftData.length) {
+      imprint.el.height = fftData.length;
+    }
     const fftBarWidth = fft.el.width / fftData.length,
       fftTickStep = Math.floor(50 / fftBarWidth);
+
+    const fffft = fourierTransform(
+      fftData.slice(0, Math.pow(2, Math.floor(Math.log2(fftData.length))))
+    ) as number[];
+
+    const sorted4ft = fffft.map((v, index) => [v, index]).sort((v1, v2) => v2[0] - v1[0]);
+
+    let speaker = -1;
+    for (let i = 0; i < sorted4ft.length / 8; ++i) {
+      if (sorted4ft[i][0] > 0.04) {
+        speaker = 0;
+        if (sorted4ft[i][1] > sorted4ft.length / 4) {
+          speaker = 1;
+          break;
+        }
+      }
+    }
+
+    while (fftData.length > fffft.length) {
+      fffft.push(0);
+    }
+
     fftData.forEach((value, index) => {
       const y = fft.el.height * (1 - value);
       fft.ctx.lineTo(fftBarWidth * index, y);
@@ -127,8 +165,14 @@ export class SpeakerDetector {
         fft.ctx.strokeText(index.toString(), fftBarWidth * (index + 0.5), 10);
       }
       fft.ctx.lineTo(fftBarWidth * (index + 1), y);
+      // setPixel(imprint.ctx, this.imprintIndex, index, fffft[index] * 4);
+      setPixel(imprint.ctx, this.imprintIndex, index, fftData[index] * 4);
     });
     fft.ctx.stroke();
+
+    setPixel(imprint.ctx, this.imprintIndex, 0, (speaker + 1) / 4);
+
+    return speaker;
   }
 
   stop() {
