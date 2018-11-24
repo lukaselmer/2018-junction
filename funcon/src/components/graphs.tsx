@@ -2,12 +2,7 @@ import React from 'react';
 import { Pie } from 'react-chartjs-2';
 
 import { start } from '../chart';
-import {
-  firstSpeakerLowConfidenceWords,
-  percentageFirstSpeaker,
-  percentageSecondSpeaker,
-  secondSpeakerSwearWords
-} from '../text-analysis';
+import { speakerStatistics } from '../text-analysis';
 
 const chartColors = {
   red: 'rgb(255, 99, 132)',
@@ -20,7 +15,7 @@ const chartColors = {
 };
 
 export function Graphs() {
-  start(secondSpeakerSwearWords, firstSpeakerLowConfidenceWords);
+  start(speakerStatistics[1].rudeWords, speakerStatistics[0].lowConfidenceWords);
 
   return (
     <div>
@@ -29,12 +24,12 @@ export function Graphs() {
         data={{
           datasets: [
             {
-              data: [percentageFirstSpeaker, percentageSecondSpeaker],
+              data: speakerStatistics.map(({ percentage }) => percentage),
               backgroundColor: [chartColors.yellow, chartColors.green],
-              label: 'Dataset 1'
+              label: 'Speaker Percentage'
             }
           ],
-          labels: ['You', 'Katarina']
+          labels: speakerStatistics.map(({ speaker: { name } }) => name)
         }}
         options={{
           responsive: true

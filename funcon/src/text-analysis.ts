@@ -1,47 +1,67 @@
-import { text } from '.././conversation';
+import { sum } from 'lodash';
+import { conversation } from '../conversation';
 
-const firstSpeakerSentences: string[] = [];
-const secondSpeakerSentences: string[] = [];
+export interface Speaker {
+  id: number;
+  name: string;
+}
 
-const unconfidentWords = ['i feel', 'probably', 'maybe', 'i think'];
-const rudeWords = [' shit', 'fuck', 'ass'];
+export interface SpeakerStatistics {
+  speaker: Speaker;
+  sentences: string[];
+  words: string[];
+  numberOfWords: number;
+  percentage: number;
+  rudeWords: Map<string, number>;
+  lowConfidenceWords: Map<string, number>;
+  parasiteWords: Map<string, number>;
+}
+
+const lowConfidenceWords = ['i feel', 'probably', 'maybe', 'i think'];
+const rudeWords = ['shit', 'fuck', 'ass'];
 const parasiteWords = ['example', ' like ', ' so '];
 
-text.forEach((t, i) => (i % 2 == 0 ? firstSpeakerSentences : secondSpeakerSentences).push(t));
+function calcSpeakerStatistics(speaker: Speaker, sentences: string[]): SpeakerStatistics {
+  const words = sentences.map(sentence => sentence.split(' ')).flat();
+  return {
+    speaker,
+    sentences,
+    words,
+    numberOfWords: words.length,
+    percentage: 0,
+    rudeWords: calculateWordsFrequence(sentences, rudeWords),
+    lowConfidenceWords: calculateWordsFrequence(sentences, lowConfidenceWords),
+    parasiteWords: calculateWordsFrequence(sentences, parasiteWords)
+  };
+}
 
-const wordCountFirstSpeaker = countWordsOfSpeaker(firstSpeakerSentences);
-const wordCountSecondSpeaker = countWordsOfSpeaker(secondSpeakerSentences);
+export const speakers = conversation.map(speech => speech.speaker);
+export const speakerIds = [...new Set(conversation.map(speech => speech.speaker.id))];
 
-const totalNumberOfWords = wordCountFirstSpeaker + wordCountSecondSpeaker;
-
-export const percentageFirstSpeaker = calculatePercentage(wordCountFirstSpeaker, totalNumberOfWords);
-export const percentageSecondSpeaker = calculatePercentage(wordCountSecondSpeaker, totalNumberOfWords);
-
-// currently unused: export const firstSpeakerSwearWords = calculateWordsFrequence(firstSpeakerSentences, rudeWords);
-export const secondSpeakerSwearWords = calculateWordsFrequence(secondSpeakerSentences, rudeWords);
-
-export const firstSpeakerLowConfidenceWords = calculateWordsFrequence(
-  firstSpeakerSentences,
-  unconfidentWords
+export const groupedSpeakerStatistics = new Map<number, SpeakerStatistics>();
+speakerIds.forEach(speakerId =>
+  groupedSpeakerStatistics.set(
+    speakerId,
+    calcSpeakerStatistics(
+      speakers.find(speaker => speaker.id === speakerId) as Speaker,
+      conversation.filter(({ speaker }) => speaker.id === speakerId).map(({ text }) => text)
+    )
+  )
 );
-// currently unused: export const secondSpeakerLowConfidenceWords = calculateWordsFrequence(
-//   secondSpeakerSentences,
-//   unconfidentWords
-// );
 
-function countWordsOfSpeaker(sentences: string[]) {
-  return sentences.reduce((sum, sentence) => sum + wordCount(sentence), 0);
-}
+const totalNumberOfWords = sum([...groupedSpeakerStatistics.values()].map(val => val.numberOfWords));
+speakerIds.forEach(speakerId => {
+  const stats = groupedSpeakerStatistics.get(speakerId);
+  if (!stats) throw new Error('');
+  stats.percentage = calculatePercentage(stats.numberOfWords, totalNumberOfWords);
+});
 
-function wordCount(str: string) {
-  return str.split(' ').length;
-}
+export const speakerStatistics = [...groupedSpeakerStatistics.values()];
 
 function calculatePercentage(wordCount: number, totalNumberOfWords: number): number {
   return Math.round((wordCount / totalNumberOfWords) * 100);
 }
 
-// Returns how many times word appeared
 function howManyWordAppeared(word: string, sentence: string): number {
   let count = 0;
   while (sentence.toLowerCase().indexOf(word) != -1) {
@@ -53,7 +73,7 @@ function howManyWordAppeared(word: string, sentence: string): number {
 }
 
 function calculateWordsFrequence(sentences: string[], words: string[]) {
-  const resultMap = new Map();
+  const resultMap = new Map<string, number>();
   words.forEach(word => {
     let count = 0;
     sentences.forEach(sencence => {
