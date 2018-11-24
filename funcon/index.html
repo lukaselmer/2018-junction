@@ -1,55 +1,137 @@
 <html>
+  <head>
+    <link rel="stylesheet" href="index.scss" />
+  </head>
+  <body>
+    <button>Start</button>
+    <script src="./src/index.ts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
-<body>
-  <button>Start</button>
-  <script src="./src/index.ts"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <h1 class="title">Your Conversation Feedback</h1>
+    <div class="one" id="canvas-holder"><canvas id="chart-area"></canvas></div>
+    <div class="two" id="container"><canvas id="canvas"></canvas></div>
 
-  <div id="canvas-holder" style="width:40%">
-    <canvas id="chart-area"></canvas>
-  </div>
-  <script>
+    <script>
+      window.chartColors = {
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)'
+      };
 
-    window.chartColors = {
-      yellow: 'rgb(255, 205, 86)',
-      green: 'rgb(75, 192, 192)',
-    };
+      var colorNames = Object.keys(window.chartColors);
 
-    var randomScalingFactor = function () {
-      return Math.round(Math.random() * 100);
-    };
-
-    var config = {
-      type: 'pie',
-      data: {
-        datasets: [{
-          data: [
-            72,
-            28
-          ],
-          backgroundColor: [
-            window.chartColors.yellow,
-            window.chartColors.green,
-          ],
-          label: 'Dataset 1'
-        }],
-        labels: [
-          'Yellow',
-          'Green',
+      var SWEARWORDS = ['shit', 'fuck', 'ass'];
+      var color = Chart.helpers.color;
+      var barChartData = {
+        labels: ['shit', 'fuck', 'ass'],
+        datasets: [
+          {
+            backgroundColor: color(window.chartColors.yellow)
+              .alpha(0.5)
+              .rgbString(),
+            borderColor: window.chartColors.green,
+            borderWidth: 1,
+            data: [3, 1, 2],
+            label: 'Frequency'
+          }
         ]
-      },
-      options: {
-        responsive: true
-      }
-    };
+      };
 
-    window.onload = function () {
-      var ctx = document.getElementById('chart-area').getContext('2d');
-      window.myPie = new Chart(ctx, config);
-    };
+      window.onload = function() {
+        var ctx = document.getElementById('chart-area').getContext('2d');
+        window.myPie = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            datasets: [
+              {
+                data: [72, 28],
+                backgroundColor: [window.chartColors.yellow, window.chartColors.green]
+              }
+            ],
+            labels: ['You', 'Katarina']
+          },
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: 'Conversation Pie'
+            }
+          }
+        });
 
-    var colorNames = Object.keys(window.chartColors);
-  </script>
-</body>
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myBar = new Chart(ctx, {
+          type: 'bar',
+          data: barChartData,
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: 'Swearwords'
+            }
+          }
+        });
+      };
 
+      document.getElementById('randomizeData').addEventListener('click', function() {
+        var zero = Math.random() < 0.2 ? true : false;
+        barChartData.datasets.forEach(function(dataset) {
+          dataset.data = dataset.data.map(function() {
+            return zero ? 0.0 : randomScalingFactor();
+          });
+        });
+        window.myBar.update();
+      });
+
+      var colorNames = Object.keys(window.chartColors);
+      document.getElementById('addDataset').addEventListener('click', function() {
+        var colorName = colorNames[barChartData.datasets.length % colorNames.length];
+        var dsColor = window.chartColors[colorName];
+        var newDataset = {
+          label: 'Dataset ' + (barChartData.datasets.length + 1),
+          backgroundColor: color(dsColor)
+            .alpha(0.5)
+            .rgbString(),
+          borderColor: dsColor,
+          borderWidth: 1,
+          data: []
+        };
+
+        for (var index = 0; index < barChartData.labels.length; ++index) {
+          newDataset.data.push(randomScalingFactor());
+        }
+
+        barChartData.datasets.push(newDataset);
+        window.myBar.update();
+      });
+
+      document.getElementById('addData').addEventListener('click', function() {
+        if (barChartData.datasets.length > 0) {
+          var month = MONTHS[barChartData.labels.length % MONTHS.length];
+          barChartData.labels.push(month);
+
+          for (var index = 0; index < barChartData.datasets.length; ++index) {
+            // window.myBar.addData(randomScalingFactor(), index);
+            barChartData.datasets[index].data.push(randomScalingFactor());
+          }
+
+          window.myBar.update();
+        }
+      });
+
+      document.getElementById('removeDataset').addEventListener('click', function() {
+        barChartData.datasets.pop();
+        window.myBar.update();
+      });
+
+      document.getElementById('removeData').addEventListener('click', function() {
+        barChartData.labels.splice(-1, 1); // remove the label first
+
+        barChartData.datasets.forEach(function(dataset) {
+          dataset.data.pop();
+        });
+
+        window.myBar.update();
+      });
+    </script>
+  </body>
 </html>
