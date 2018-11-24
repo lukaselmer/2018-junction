@@ -1,6 +1,55 @@
 <html>
-  <body>
-    <button>Start</button>
-    <script src="./src/index.ts"></script>
-  </body>
+
+<body>
+  <button>Start</button>
+  <script src="./src/index.ts"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+  <div id="canvas-holder" style="width:40%">
+    <canvas id="chart-area"></canvas>
+  </div>
+  <script>
+
+    window.chartColors = {
+      yellow: 'rgb(255, 205, 86)',
+      green: 'rgb(75, 192, 192)',
+    };
+
+    var randomScalingFactor = function () {
+      return Math.round(Math.random() * 100);
+    };
+
+    var config = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            72,
+            28
+          ],
+          backgroundColor: [
+            window.chartColors.yellow,
+            window.chartColors.green,
+          ],
+          label: 'Dataset 1'
+        }],
+        labels: [
+          'Yellow',
+          'Green',
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    window.onload = function () {
+      var ctx = document.getElementById('chart-area').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+    var colorNames = Object.keys(window.chartColors);
+  </script>
+</body>
+
 </html>
