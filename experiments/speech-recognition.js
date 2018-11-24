@@ -1,5 +1,5 @@
 // @ts-ignore
-var recognition = new window.webkitSpeechRecognition();
+var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 // var speechRecognitionList = new SpeechGrammarList();
 
 recognition.onstart = function() {
