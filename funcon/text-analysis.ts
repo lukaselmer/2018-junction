@@ -35,3 +35,45 @@ function calculatePercentage(
 ): number {
   return Math.round((wordCount / totalNumberOfWords) * 100);
 }
+
+const unconfidentWords = ['i feel', 'probably', 'maybe', 'i think'];
+const rudeWords = [' shit', 'fuck', 'ass'];
+const parasiteWords = ['example', ' like ', ' so '];
+
+
+//Returns how many times word appeared
+function howManyWordAppeared(word: string, sentence: string): number {
+    var count = 0;
+    while (sentence.toLowerCase().indexOf(word) != -1) {
+        count++;
+        var pos = sentence.indexOf(word);
+        sentence = sentence.substring(pos + word.length);
+    }
+    return count;
+}
+
+for (var i = 0; i < text.length; i++) {
+    unconfidentWords.forEach(element => {
+        var count = howManyWordAppeared(element, text[i]);
+        if (count > 0) {
+            i % 2 == 0 ? console.log("first person is shy") : console.log("second person is shy");
+            console.log(element + " = " + count);
+        }
+    });
+
+    rudeWords.forEach(element => {
+        var count = howManyWordAppeared(element, text[i]);
+        if (count > 0) {
+            i % 2 == 0 ? console.log("first person is rude") : console.log("second person is rude");
+            console.log(element + " = " + count);
+        }
+    });
+
+    parasiteWords.forEach(element => {
+        var count = howManyWordAppeared(element, text[i]);
+        if (count > 0) {
+            i % 2 == 0 ? console.log("first person uses parasite words") : console.log("second person uses parasite words");
+            console.log(element + " = " + count);
+        }
+    });
+}
