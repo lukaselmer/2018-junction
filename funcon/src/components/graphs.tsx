@@ -1,8 +1,77 @@
 import React from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 
 import { start } from '../chart';
 import { speakerStatistics } from '../text-analysis';
+
+export function Graphs() {
+  start(speakerStatistics[1].rudeWords, speakerStatistics[0].lowConfidenceWords);
+
+  return (
+    <div>
+      <h1 className='title'>Your Conversation Feedback</h1>
+      {drawSpeakerStatistics()}
+      {drawSwearWords()}
+    </div>
+  );
+}
+
+function drawSpeakerStatistics() {
+  return (
+    <Pie
+      data={{
+        datasets: [
+          {
+            data: speakerStatistics.map(({ percentage }) => percentage),
+            backgroundColor: [chartColors.yellow, chartColors.green],
+            label: 'Speaker Percentage'
+          }
+        ],
+        labels: speakerStatistics.map(({ speaker: { name } }) => name)
+      }}
+      options={{
+        responsive: true
+      }}
+    />
+  );
+}
+
+function drawSwearWords() {
+  const swearWords = speakerStatistics[1].rudeWords;
+
+  return (
+    <Bar
+      data={{
+        labels: [...swearWords.keys()],
+        datasets: [
+          {
+            backgroundColor: countBackgroundColors(swearWords),
+            borderColor: chartColors.green,
+            borderWidth: 1,
+            data: Array.from(swearWords.values()),
+            label: 'Frequency'
+          }
+        ]
+      }}
+      options={{
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true
+              }
+            }
+          ]
+        },
+        responsive: true,
+        title: {
+          display: true,
+          text: 'Conversation Rudeness'
+        }
+      }}
+    />
+  );
+}
 
 const chartColors = {
   red: 'rgb(255, 99, 132)',
@@ -14,27 +83,12 @@ const chartColors = {
   grey: 'rgb(201, 203, 207)'
 };
 
-export function Graphs() {
-  start(speakerStatistics[1].rudeWords, speakerStatistics[0].lowConfidenceWords);
-
-  return (
-    <div>
-      <h1 className='title'>Your Conversation Feedback</h1>
-      <Pie
-        data={{
-          datasets: [
-            {
-              data: speakerStatistics.map(({ percentage }) => percentage),
-              backgroundColor: [chartColors.yellow, chartColors.green],
-              label: 'Speaker Percentage'
-            }
-          ],
-          labels: speakerStatistics.map(({ speaker: { name } }) => name)
-        }}
-        options={{
-          responsive: true
-        }}
-      />
-    </div>
+function countBackgroundColors(data: Map<String, number>) {
+  const chartBackgroundColor: string[] = [];
+  data.forEach(count =>
+    count > 2
+      ? chartBackgroundColor.push(chartColors.red)
+      : chartBackgroundColor.push(chartColors.yellow)
   );
+  return chartBackgroundColor;
 }

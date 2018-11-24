@@ -21,45 +21,6 @@ function countBackgroundColors(data: Map<String, number>) {
 }
 
 export function start(swearWords: Map<String, number>, lowConfidenceWords: Map<String, number>) {
-  const SWEARWORDS = Array.from(swearWords.keys());
-  const swearWordChartData = {
-    type: 'bar',
-    labels: SWEARWORDS,
-    datasets: [
-      {
-        backgroundColor: countBackgroundColors(swearWords),
-        borderColor: chartColors.green,
-        borderWidth: 1,
-        data: Array.from(swearWords.values()),
-        label: 'Frequency'
-      }
-    ]
-  };
-
-  const swearWordBar = (document.getElementById('canvas-swearing') as HTMLCanvasElement).getContext(
-    '2d'
-  );
-  new Chart(swearWordBar, {
-    type: 'bar',
-    data: swearWordChartData,
-    options: {
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true
-            }
-          }
-        ]
-      },
-      responsive: true,
-      title: {
-        display: true,
-        text: 'Conversation Rudeness'
-      }
-    }
-  });
-
   const LOW_CONFIDENCE_WORDS = Array.from(lowConfidenceWords.keys());
   const lowConfidenceWordData = {
     type: 'bar',
