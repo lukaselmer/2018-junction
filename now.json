@@ -3,5 +3,8 @@
   "version": 2,
   "builds": [
     { "src": "funcon/package.json", "use": "@now/static-build" }
+  ],
+  "routes": [
+    { "src": "/*", "dest": "/funcon"}
   ]
 }
