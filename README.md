@@ -1,5 +1,9 @@
-# 2018-junction
+# FunCon
 
 Junction 2018
 
-![Conversation](conversation.png?raw=true "Conversation App")
+## Deployment
+
+https://funcon.now.sh -> https://dist-h3eg6wwql.now.sh
+
+![Conversation](conversation.png?raw=true 'Conversation App')
