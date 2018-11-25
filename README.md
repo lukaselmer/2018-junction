@@ -2,6 +2,14 @@
 
 Junction 2018
 
+## Demo
+
+https://funcon.now.sh/?_now_no_cache=1
+
+## Demo Video
+
+https://youtu.be/lJV9scgQvuU
+
 ## Deployment
 
 https://funcon.now.sh/?_now_no_cache=1
