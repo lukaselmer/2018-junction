@@ -38,9 +38,9 @@ function calculatePercentage(wordCount: number, totalNumberOfWords: number): num
 }
 
 function calcSpeakerStatistics(speaker: Speaker, sentences: string[]): SpeakerStatistics {
-  const lowConfidenceWords = ['i feel', 'probably', 'maybe', 'i think'];
+  const lowConfidenceWords = ['i feel', 'probably', 'maybe', 'i think', "i don't know"];
   const rudeWords = generateRudeWords();
-  const parasiteWords = ['example', 'like', 'so'];
+  const parasiteWords = ['example', 'like', 'so', 'hmm'];
 
   const words = sentences.map(sentence => sentence.split(' ')).flat();
   const combinedSentences = sentences.join(' ').toLocaleLowerCase();
