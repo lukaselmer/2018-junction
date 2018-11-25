@@ -11,5 +11,3 @@ https://funcon.now.sh/?_now_no_cache=1
 ---
 
 ![Screen A](docs/a.png?raw=true 'Screen A')
-
-![Conversation](conversation.png?raw=true 'Conversation App')
