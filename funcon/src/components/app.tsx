@@ -35,6 +35,7 @@ export class App extends Component<{}, S> {
   componentWillUnmount() {
     this.state.transcriptMonitor.stop();
     this.state.transcriptMonitor.clearListeners();
+    this.state.speakerDetector.stop();
   }
 
   render() {
@@ -71,14 +72,9 @@ export class App extends Component<{}, S> {
 
   private startListenting() {
     this.state.transcriptMonitor.start();
-    this.state.speakerDetector.start(speakers => {
-      // const speakersElement = document.getElementById('speakers') as HTMLSpanElement;
-      // speakersElement.innerText = [...speakers.speakerIndices].join(', ');
-      this.state.transcriptMonitor.recordSpeakers(speakers.speakerIndices);
-    });
-    // @ts-ignore
-    // monitor(this.state.speakerDetector);
-    // this.state.speakerDetector.start(frame => console.log([...frame.speakerIndices].join(', ')));
+    this.state.speakerDetector.start(speakers =>
+      this.state.transcriptMonitor.recordSpeakers(speakers.speakerIndices)
+    );
   }
 
   private stop() {
