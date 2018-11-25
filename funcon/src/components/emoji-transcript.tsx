@@ -13,7 +13,9 @@ export function EmojiTranscript({ montior }: P) {
     .reverse()
     .flat()
     .map(findEmoji)
-    .filter(Boolean) as string[];
+    .filter(Boolean)
+    .map(s => s.split(''))
+    .flat();
 
   const wordCount = new Map<string, number>();
   words.forEach(word => wordCount.set(word, (wordCount.get(word) || 0) + 1));
@@ -24,6 +26,10 @@ export function EmojiTranscript({ montior }: P) {
     <>
       <h2>Emoji Usage</h2>
       <div className='row'>
+        <div className='col-sm'>
+          <h2>Recent</h2>
+          <div style={{ fontSize: '2em' }}>{words.join('')}</div>
+        </div>
         <div className='col-sm'>
           <h2>Favorites</h2>
           <div style={{ fontSize: '4em' }}>
@@ -37,10 +43,6 @@ export function EmojiTranscript({ montior }: P) {
               </div>
             ))}
           </div>
-        </div>
-        <div className='col-sm'>
-          <h2>Recent</h2>
-          <div style={{ fontSize: '2em' }}>{words.join('')}</div>
         </div>
       </div>
     </>
