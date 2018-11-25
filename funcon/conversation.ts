@@ -1,6 +1,7 @@
+import { cloneDeep } from 'lodash';
 import { Speech } from './src/transcript-monitor';
 
-export const conversation = [
+const conversation = [
   {
     transcript:
       'I’m thinking about maybe going to the Junction hackathon on the weekend. Would you maybe like to come with me?',
@@ -8,13 +9,13 @@ export const conversation = [
   },
   {
     transcript:
-      'What? Are you crazy? It sounds like a shitty idea! Why would I spend my weekend with a bunch of nerds that code in the dark for two days? This is ridiculous!',
+      'What? Are you crazy? That idea sounds like s***! Complete b******* Why would I spend my weekend with a bunch of nerds that code in the dark for two days? This is ridiculous!',
     speaker: 1
   },
   { transcript: 'Oh, I think I could learn a lot from others.', speaker: 0 },
   {
     transcript:
-      'What the fuck! If you want to learn, read a book, do a codelab or do a course. Do you really think you learn something there? You do whatever you want but I will for sure not spend my weekend time to code for free!',
+      'What the f***! If you want to learn, read a book, do a codelab or do a course. Do you really think you learn something there? You do whatever you want but I will for sure not spend my weekend time to code for free!',
     speaker: 1
   },
   {
@@ -23,17 +24,11 @@ export const conversation = [
   },
   {
     transcript:
-      'Speak for yourself! If you want to spend your time for nothing and then end up fucking exhausted … . People go fucking crazy at these events. They fall asleep on desks.',
+      'Speak for yourself! If you want to spend your time for nothing and then end up f****** exhausted … . People go f****** crazy at these events. They fall asleep on desks.',
     speaker: 1
   }
 ];
 
 export function defaultTranscript(): Speech[] {
-  return conversation;
-  // return [
-  //   {
-  //     transcript: 'hello world, with lots of monkeys and bananas',
-  //     speaker: 0
-  //   }
-  // ];
+  return cloneDeep(conversation);
 }
