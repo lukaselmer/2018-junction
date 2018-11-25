@@ -4,6 +4,6 @@ Junction 2018
 
 ## Deployment
 
-https://fun-con.now.sh -> https://dist-h3eg6wwql.now.sh
+https://funcon.now.sh/?_now_no_cache=1
 
 ![Conversation](conversation.png?raw=true 'Conversation App')

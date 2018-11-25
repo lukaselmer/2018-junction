@@ -4,5 +4,8 @@
   "regions": ["bru"],
   "alias": ["fun-con", "funcon"],
   "builds": [{ "src": "funcon/package.json", "use": "@now/static-build" }],
-  "routes": [{ "src": "^/(.*)", "dest": "/funcon/$1" }, { "src": ".*", "dest": "/funcon/index.html" }]
+  "routes": [
+    { "src": "^/(.*)", "dest": "/funcon/$1", "headers": { "cache-control": "s-maxage=1" } },
+    { "src": ".*", "dest": "/funcon/index.html", "headers": { "cache-control": "s-maxage=1" } }
+  ]
 }
