@@ -11,8 +11,19 @@ export function EmojiTranscript({ montior }: P) {
   const splitter = new GraphemeSplitter();
 
   const words = montior.conversation
-    .map(s => s.transcript.split(' '))
+    .map(s => s.transcript)
     .reverse()
+    .map(s => s.split(' '))
+    .flat()
+    .map(s => s.split('?'))
+    .flat()
+    .map(s => s.split('!'))
+    .flat()
+    .map(s => s.split(','))
+    .flat()
+    .map(s => s.split(';'))
+    .flat()
+    .map(s => s.split('.'))
     .flat()
     .map(findEmoji)
     .filter(Boolean)
@@ -26,25 +37,23 @@ export function EmojiTranscript({ montior }: P) {
 
   return (
     <>
-      <h2>Emoji Usage</h2>
-      <div className='row'>
-        <div className='col-sm'>
-          <h2>Recent</h2>
-          <div style={{ fontSize: '2em' }}>{words.join('')}</div>
-        </div>
-        <div className='col-sm'>
-          <h2>Favorites</h2>
-          <div style={{ fontSize: '4em' }}>
-            {counts.map(count => (
-              <div key={count}>
-                <b>{count}</b>{' '}
-                {favorites
-                  .filter(fav => fav.count === count)
-                  .map(({ word }) => word)
-                  .join('')}
-              </div>
-            ))}
-          </div>
+      <div className='col-sm'>
+        <h3>Recent Emojis</h3>
+        <div style={{ fontSize: '2.5em' }}>{words.join('')}</div>
+      </div>
+      <div className='col-sm'>
+        <h3>Favorite Emojis</h3>
+        <div style={{ fontSize: '2.5em' }}>
+          {counts.map(count => (
+            <span key={count}>
+              <b>{count}</b>{' '}
+              {favorites
+                .filter(fav => fav.count === count)
+                .map(({ word }) => word)
+                .join(' ')}
+              {' | '}
+            </span>
+          ))}
         </div>
       </div>
     </>

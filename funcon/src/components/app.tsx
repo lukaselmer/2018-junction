@@ -49,13 +49,12 @@ export class App extends Component<{}, S> {
       <div className='container'>
         <h1>Hello FunCon 🎉🎉🎉</h1>
 
-        <EmojiTranscript montior={this.state.transcriptMonitor} />
-        <div
-          className={`transcript-text-overlay ${this.state.showTranscript ? 'open' : 'closed'}`}
-          onClick={() => this.setState({ showTranscript: !this.state.showTranscript })}
-        >
-          <Transcript montior={this.state.transcriptMonitor} />
+        <h2>Overview</h2>
+        <div className='row'>
+          <EmojiTranscript montior={this.state.transcriptMonitor} />
         </div>
+
+        <Graphs conversation={this.state.transcriptMonitor.conversation} />
 
         <button
           className={`start-stop-button ${
@@ -66,7 +65,12 @@ export class App extends Component<{}, S> {
           {this.state.recordingState === 'Stopped' ? 'Start' : 'Stop'}
         </button>
 
-        <Graphs conversation={this.state.transcriptMonitor.conversation} />
+        <div
+          className={`transcript-text-overlay ${this.state.showTranscript ? 'open' : 'closed'}`}
+          onClick={() => this.setState({ showTranscript: !this.state.showTranscript })}
+        >
+          <Transcript montior={this.state.transcriptMonitor} />
+        </div>
       </div>
     );
   }

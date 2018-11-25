@@ -26,6 +26,20 @@ const conversation = [
     transcript:
       'Speak for yourself! If you want to spend your time for nothing and then end up f****** exhausted … . People go f****** crazy at these events. They fall asleep on desks.',
     speaker: 1
+  },
+  {
+    transcript:
+      'Did your monkey eat all your bananas and pears today, and ship them to us by train or airplane?',
+    speaker: 0
+  },
+  {
+    transcript:
+      'They did! And all the stars are falling from the sky, until there is no star left. Not okey!',
+    speaker: 1
+  },
+  {
+    transcript: 'Uh oh... There are a lot fireworks and sparkles, and the cow went home to Finland.',
+    speaker: 1
   }
 ];
 
