@@ -25,7 +25,7 @@ export class TranscriptMonitor {
 
   constructor() {
     this.listeners.push(speech => this.conversation.push(speech));
-    this.listeners.push(() => console.log(this.conversation));
+    if (debug) this.listeners.push(() => console.log(this.conversation));
 
     this.recognition.continuous = false;
     this.recognition.maxAlternatives = 1;
