@@ -39,42 +39,56 @@ function calculatePercentage(wordCount: number, totalNumberOfWords: number): num
 
 function calcSpeakerStatistics(speaker: Speaker, sentences: string[]): SpeakerStatistics {
   const lowConfidenceWords = ['i feel', 'probably', 'maybe', 'i think'];
-  const rudeWords = ['shit', 'fuck', 'ass'];
-  const parasiteWords = ['example', ' like ', ' so '];
+  const rudeWords = generateRudeWords();
+  const parasiteWords = ['example', 'like', 'so'];
 
   const words = sentences.map(sentence => sentence.split(' ')).flat();
+  const combinedSentences = sentences.join(' ').toLocaleLowerCase();
   return {
     speaker,
     sentences,
     words,
     numberOfWords: words.length,
     percentage: 0,
-    rudeWords: calculateWordsFrequence(sentences, rudeWords),
-    lowConfidenceWords: calculateWordsFrequence(sentences, lowConfidenceWords),
-    parasiteWords: calculateWordsFrequence(sentences, parasiteWords)
+    rudeWords: calculateWordsFrequency(combinedSentences, rudeWords),
+    lowConfidenceWords: calculateWordsFrequency(combinedSentences, lowConfidenceWords),
+    parasiteWords: calculateWordsFrequency(combinedSentences, parasiteWords)
   };
 }
 
-function calculateWordsFrequence(sentences: string[], words: string[]) {
+function generateRudeWords() {
+  return Array.from({ length: 26 }, (_, i) => String.fromCharCode('a'.charCodeAt(0) + i)).map(
+    char => `${char}***`
+  );
+}
+
+function calculateWordsFrequency(sentence: string, words: string[]) {
   const resultMap = new Map<string, number>();
   words.forEach(word => {
-    let count = 0;
-    sentences.forEach(sencence => {
-      count = count + howManyWordAppeared(word, sencence);
-    });
-    if (count > 0) {
-      resultMap.set(word, count);
-    }
+    const count = countOccurrencesInSentence(word, sentence);
+    if (count > 0) resultMap.set(word, count);
   });
   return resultMap;
 }
 
-function howManyWordAppeared(word: string, sentence: string): number {
+function countOccurrencesInSentence(wordOrExpression: string, sentence: string): number {
+  if (wordOrExpression.indexOf(' ') !== -1) return countWordInSentence(wordOrExpression, sentence);
+  return countSpacedExpressionsInSentence(wordOrExpression, sentence);
+}
+
+function countWordInSentence(word: string, sentence: string): number {
+  return sentence.split(' ').filter(sentenceWord => sentenceWord === word).length;
+}
+
+function countSpacedExpressionsInSentence(expression: string, sentence: string): number {
+  let searchFrom = 0;
   let count = 0;
-  while (sentence.toLowerCase().indexOf(word) != -1) {
+  while (true) {
+    const pos = sentence.indexOf(expression, searchFrom);
+    if (pos === -1) break;
+
     count++;
-    const pos = sentence.indexOf(word);
-    sentence = sentence.substring(pos + word.length);
+    searchFrom = pos + expression.length;
   }
   return count;
 }
