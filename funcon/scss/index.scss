@@ -54,6 +54,7 @@ h1 {
 
   &.closed {
     .transcript-text {
+      margin-left: -10px;
       width: 15px;
       color: transparent;
       outline: dotted rgba(0, 0, 0, 0.7) 7px;

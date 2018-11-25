@@ -53,7 +53,6 @@ function drawWordStatistics(title: string, words: Map<string, number>) {
             ]
           },
           responsive: true,
-          aspectRatio: 4 / 3,
           title: {
             display: true,
             text: title

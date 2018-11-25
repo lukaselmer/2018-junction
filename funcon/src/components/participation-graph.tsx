@@ -23,7 +23,9 @@ export function ParticipationGraph({ conversation }: P) {
               label: 'Speaker Percentage'
             }
           ],
-          labels: speakerStatistics.map(({ speaker: { name } }) => name)
+          labels: speakerStatistics.map(
+            ({ percentage, speaker: { name } }) => `${name} (${percentage}%)`
+          )
         }}
         options={{
           responsive: true

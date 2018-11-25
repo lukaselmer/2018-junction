@@ -23,7 +23,7 @@ export class App extends Component<{}, S> {
     this.state = {
       transcriptMonitor: new TranscriptMonitor(),
       speakerDetector: new SpeakerDetector(),
-      recordingState: 'Stopped',
+      recordingState: 'Started',
       lastUpdate: new Date(),
       showTranscript: false
     };
@@ -32,9 +32,7 @@ export class App extends Component<{}, S> {
   }
 
   componentDidMount() {
-    // We could start recording immediately like this:
-    //  this.state.recordingState = 'Started';
-    //  this.startListenting();
+    this.startListenting();
   }
 
   componentWillUnmount() {
@@ -47,7 +45,7 @@ export class App extends Component<{}, S> {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container-fluid'>
         <h1>Hello FunCon 🎉🎉🎉</h1>
 
         <h2>Overview</h2>
