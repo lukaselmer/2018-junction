@@ -2,7 +2,7 @@
 
 Junction 2018
 
-## Demo
+## Demo (tested in Chrome only)
 
 https://funcon.now.sh/?_now_no_cache=1
 
