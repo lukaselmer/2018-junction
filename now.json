@@ -1,9 +1,4 @@
 {
   "name": "funcon",
-  "type": "static",
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
-  }
+  "type": "static"
 }
