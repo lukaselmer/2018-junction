@@ -13,6 +13,3 @@ if (module.hot) {
   // @ts-ignore
   module.hot.dispose(() => ReactDOM.unmountComponentAtNode(root));
 }
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('start stuff...');
-});

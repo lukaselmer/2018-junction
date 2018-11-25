@@ -59,7 +59,7 @@ export class App extends Component<{}, S> {
           {this.state.recordingState === 'Stopped' ? 'Start' : 'Stop'}
         </button>
 
-        <Graphs />
+        <Graphs conversation={this.state.transcriptMonitor.conversation} />
       </div>
     );
   }

@@ -25,7 +25,7 @@ export function findEmoji(text: string): string {
 
   if (text.endsWith('s')) {
     const multiEmoji = findEmoji(text.slice(0, text.length - 1));
-    if (multiEmoji) return `${multiEmoji}${multiEmoji}${multiEmoji}`;
+    if (multiEmoji) return `${multiEmoji}${multiEmoji}${multiEmoji}${multiEmoji}${multiEmoji}`;
   }
 
   return '';

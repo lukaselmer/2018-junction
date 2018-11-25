@@ -1,20 +1,22 @@
+import GraphemeSplitter from 'grapheme-splitter';
 import { sortBy } from 'lodash';
 import React from 'react';
 import { findEmoji } from '../lib/emojis';
 import { TranscriptMonitor } from '../transcript-monitor';
-
 interface P {
   montior: TranscriptMonitor;
 }
 
 export function EmojiTranscript({ montior }: P) {
+  const splitter = new GraphemeSplitter();
+
   const words = montior.conversation
     .map(s => s.transcript.split(' '))
     .reverse()
     .flat()
     .map(findEmoji)
     .filter(Boolean)
-    .map(s => s.split(''))
+    .map(s => splitter.splitGraphemes(s))
     .flat();
 
   const wordCount = new Map<string, number>();

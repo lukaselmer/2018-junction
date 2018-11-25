@@ -1,41 +1,30 @@
 import React from 'react';
 import { Bar, Pie } from 'react-chartjs-2';
 
-import { speakerStatistics } from '../text-analysis';
+import { calculateSpeakerStatistics, SpeakerStatistics } from '../text-analysis';
+import { Speech } from '../transcript-monitor';
 
-export function Graphs() {
+interface P {
+  conversation: Speech[];
+}
+
+export function Graphs({ conversation }: P) {
+  const speakerStatistics = calculateSpeakerStatistics(conversation);
   return (
     <div>
       <div style={{ maxWidth: '900px', textAlign: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
-        {drawSpeakerStatistics()}
+        {drawSpeakerStatistics(speakerStatistics)}
       </div>
 
-      <h3>Rudeness</h3>
-      <div className='row'>
+      <div>
         {speakerStatistics.map(stats => (
           <div key={stats.speaker.name} className='col-sm'>
-            {drawWordStatistics(`Conversation Rudeness of ${stats.speaker.name}`, stats.rudeWords)}
-          </div>
-        ))}
-      </div>
-
-      <h3>Conversation Confidence</h3>
-      <div className='row'>
-        {speakerStatistics.map(stats => (
-          <div key={stats.speaker.name} className='col-sm'>
-            {drawWordStatistics(
-              `Conversation Confidence of ${stats.speaker.name}`,
-              stats.lowConfidenceWords
-            )}
-          </div>
-        ))}
-      </div>
-
-      <h3>Parasite Word Usage</h3>
-      <div className='row'>
-        {speakerStatistics.map(stats => (
-          <div key={stats.speaker.name} className='col-sm'>
-            {drawWordStatistics(`Parasite Words of ${stats.speaker.name}`, stats.parasiteWords)}
+            <h3>{stats.speaker.name}</h3>
+            <div className='row'>
+              {drawWordStatistics(`Rudeness`, stats.rudeWords)}
+              {drawWordStatistics(`Confidence`, stats.lowConfidenceWords)}
+              {drawWordStatistics(`Parasite Words`, stats.parasiteWords)}
+            </div>
           </div>
         ))}
       </div>
@@ -43,7 +32,7 @@ export function Graphs() {
   );
 }
 
-function drawSpeakerStatistics() {
+function drawSpeakerStatistics(speakerStatistics: SpeakerStatistics[]) {
   return (
     <>
       <h3 className='feedback-title'>Participation</h3>
@@ -68,36 +57,39 @@ function drawSpeakerStatistics() {
 
 function drawWordStatistics(title: string, words: Map<string, number>) {
   return (
-    <Bar
-      data={{
-        labels: [...words.keys()],
-        datasets: [
-          {
-            backgroundColor: countBackgroundColors(words),
-            borderColor: chartColors.green,
-            borderWidth: 1,
-            data: Array.from(words.values()),
-            label: 'Frequency'
-          }
-        ]
-      }}
-      options={{
-        scales: {
-          yAxes: [
+    <div className='col-sm'>
+      <Bar
+        data={{
+          labels: [...words.keys()],
+          datasets: [
             {
-              ticks: {
-                beginAtZero: true
-              }
+              backgroundColor: countBackgroundColors(words),
+              borderColor: chartColors.green,
+              borderWidth: 1,
+              data: Array.from(words.values()),
+              label: 'Frequency'
             }
           ]
-        },
-        responsive: true,
-        title: {
-          display: true,
-          text: title
-        }
-      }}
-    />
+        }}
+        options={{
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true
+                }
+              }
+            ]
+          },
+          responsive: true,
+          aspectRatio: 4 / 3,
+          title: {
+            display: true,
+            text: title
+          }
+        }}
+      />
+    </div>
   );
 }
 

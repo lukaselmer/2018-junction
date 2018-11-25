@@ -1,4 +1,4 @@
-import { maxBy } from 'lodash';
+import { defaultTranscript } from '../conversation';
 
 function createSpeechRecognition(): SpeechRecognition {
   // @ts-ignore
@@ -7,10 +7,10 @@ function createSpeechRecognition(): SpeechRecognition {
 
 export interface Speech {
   transcript: string;
-  speaker: number | null;
+  speaker: number;
 }
 
-export type SpeechRecognitionResult = SpeechRecognitionAlternative & { speaker: number | null };
+export type SpeechRecognitionResult = SpeechRecognitionAlternative & { speaker: number };
 export type TranscriptListener = (speech: SpeechRecognitionResult) => void;
 
 export class TranscriptMonitor {
@@ -19,7 +19,7 @@ export class TranscriptMonitor {
   private recognition: SpeechRecognition = createSpeechRecognition();
   private listeners: (TranscriptListener)[] = [];
   private speakerCounts = new Map<number, number>();
-  conversation: Speech[] = [];
+  conversation: Speech[] = defaultTranscript();
 
   constructor() {
     this.listeners.push(speech => this.conversation.push(speech));
