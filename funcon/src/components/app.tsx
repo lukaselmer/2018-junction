@@ -3,6 +3,7 @@ import { SpeakerDetector } from '../speaker_detector';
 import { TranscriptMonitor } from '../transcript-monitor';
 import { EmojiTranscript } from './emoji-transcript';
 import { Graphs } from './graphs';
+import { ParticipationGraph } from './participation-graph';
 import { Transcript } from './transcript';
 
 const debug = false;
@@ -24,7 +25,7 @@ export class App extends Component<{}, S> {
       speakerDetector: new SpeakerDetector(),
       recordingState: 'Stopped',
       lastUpdate: new Date(),
-      showTranscript: true
+      showTranscript: false
     };
     if (debug) this.state.transcriptMonitor.addListener(speech => console.log(speech));
     this.state.transcriptMonitor.addListener(() => this.setState({ lastUpdate: new Date() }));
@@ -51,6 +52,7 @@ export class App extends Component<{}, S> {
 
         <h2>Overview</h2>
         <div className='row'>
+          <ParticipationGraph conversation={this.state.transcriptMonitor.conversation} />
           <EmojiTranscript montior={this.state.transcriptMonitor} />
         </div>
 
