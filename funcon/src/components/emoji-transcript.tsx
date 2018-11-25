@@ -9,7 +9,7 @@ interface P {
 
 export function EmojiTranscript({ montior }: P) {
   const words = montior.conversation
-    .map(s => s.split(' '))
+    .map(s => s.transcript.split(' '))
     .reverse()
     .flat()
     .map(s => s.toLocaleLowerCase())

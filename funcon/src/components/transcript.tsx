@@ -9,7 +9,9 @@ export function Transcript({ montior }: P) {
   return (
     <div className='transcript-text'>
       {[...montior.conversation].reverse().map((sentence, index) => (
-        <div key={index}>{sentence}</div>
+        <div key={index}>
+          [{sentence.speaker}]: {sentence.transcript}
+        </div>
       ))}
     </div>
   );
