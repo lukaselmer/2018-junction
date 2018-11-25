@@ -38,8 +38,16 @@ const conversation = [
     speaker: 1
   },
   {
-    transcript: 'Uh oh... There are a lot fireworks and sparkles, and the cow went home to Finland.',
+    transcript: 'And oh...! There are a lot fireworks and sparkles, and the cow went home to Finland.',
     speaker: 1
+  },
+  {
+    transcript: 'Now your just blubbering garbage... Anything else you want to say?',
+    speaker: 0
+  },
+  {
+    transcript: 'Yes! Finland, Finland, Finland, Finland, Finland, laughings',
+    speaker: 0
   }
 ];
 
