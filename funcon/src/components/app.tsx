@@ -20,7 +20,7 @@ export class App extends Component<{}, S> {
     this.state = {
       transcriptMonitor: new TranscriptMonitor(),
       speakerDetector: new SpeakerDetector(),
-      recordingState: 'Started',
+      recordingState: 'Stopped',
       lastUpdate: new Date(),
       showTranscript: true
     };
@@ -29,13 +29,17 @@ export class App extends Component<{}, S> {
   }
 
   componentDidMount() {
-    this.startListenting();
+    // We could start recording immediately like this:
+    //  this.state.recordingState = 'Started';
+    //  this.startListenting();
   }
 
   componentWillUnmount() {
-    this.state.transcriptMonitor.stop();
     this.state.transcriptMonitor.clearListeners();
-    this.state.speakerDetector.stop();
+    if (this.state.recordingState === 'Started') {
+      this.state.transcriptMonitor.stop();
+      this.state.speakerDetector.stop();
+    }
   }
 
   render() {
