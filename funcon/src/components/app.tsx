@@ -46,7 +46,7 @@ export class App extends Component<{}, S> {
   render() {
     return (
       <div className='container-fluid'>
-        <h1>🎉🎉 Hello FunCon 🎉🎉</h1>
+        <h1>🎉 Hello FunCon 🎉</h1>
 
         <h2>Overview</h2>
         <div className='row'>
