@@ -1,0 +1,10 @@
+{
+  "name": "funcon",
+  "type": "static",
+  "public": true,
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}
