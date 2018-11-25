@@ -54,3 +54,7 @@ const conversation = [
 export function defaultTranscript(): Speech[] {
   return cloneDeep(conversation);
 }
+
+export function initialTranscript(): Speech[] {
+  return defaultTranscript();
+}

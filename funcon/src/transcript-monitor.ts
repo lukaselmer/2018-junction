@@ -1,4 +1,4 @@
-import { defaultTranscript } from '../conversation';
+import { defaultTranscript, initialTranscript } from '../conversation';
 
 const debug = false;
 
@@ -69,7 +69,7 @@ export class TranscriptMonitor {
   }
 
   start() {
-    this.conversation.splice(0, this.conversation.length);
+    this.conversation = initialTranscript();
     this.continueListening = true;
     if (this.isListening) return;
     this.recognition.start();
