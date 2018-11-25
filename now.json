@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "name": "funcon",
+  "builds": [{ "src": "funcon/package.json", "use": "@now/static-build" }],
+  "routes": [{ "src": "^/(.*)", "dest": "/funcon/$1" }, { "src": ".*", "dest": "/funcon/index.html" }]
+}

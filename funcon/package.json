@@ -9,7 +9,8 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
-    "deploy": "now dist"
+    "deploy": "now dist",
+    "now-build": "parcel build index.html"
   },
   "devDependencies": {
     "@types/chart.js": "^2.7.40",
