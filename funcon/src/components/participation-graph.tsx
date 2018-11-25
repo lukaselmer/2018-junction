@@ -18,7 +18,7 @@ export function ParticipationGraph({ conversation }: P) {
         data={{
           datasets: [
             {
-              data: speakerStatistics.map(({ percentage }) => percentage),
+              data: speakerStatistics.map(({ numberOfWords }) => numberOfWords),
               backgroundColor: [chartColors.yellow, chartColors.green],
               label: 'Speaker Percentage'
             }
