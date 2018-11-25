@@ -1,4 +1,7 @@
 {
   "name": "funcon",
-  "type": "static"
+  "version": 2,
+  "builds": [
+    { "src": "funcon/package.json", "use": "@now/static-build" }
+  ]
 }
