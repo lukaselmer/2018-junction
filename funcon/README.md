@@ -1,3 +1,11 @@
+# FunCon
+
+## Deployment
+
+https://funcon.now.sh -> https://dist-h3eg6wwql.now.sh
+
+## Dialogs
+
 ### Example Dialog
 
 hey guys yes

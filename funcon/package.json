@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "deploy": "now dist"
   },
   "devDependencies": {
     "@types/chart.js": "^2.7.40",
