@@ -5,6 +5,7 @@ import { EmojiTranscript } from './emoji-transcript';
 import { Graphs } from './graphs';
 import { ParticipationGraph } from './participation-graph';
 import { Transcript } from './transcript';
+import Particles from 'react-particles-js';
 
 const debug = false;
 
@@ -45,6 +46,7 @@ export class App extends Component<{}, S> {
 
   render() {
     return (
+      <Particles>
       <div className='container-fluid'>
         <h1>🎉 Hello FunCon 🎉</h1>
 
@@ -72,6 +74,7 @@ export class App extends Component<{}, S> {
           <Transcript montior={this.state.transcriptMonitor} />
         </div>
       </div>
+      </Particles>
     );
   }
 
