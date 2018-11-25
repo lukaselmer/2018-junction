@@ -5,6 +5,8 @@ import { EmojiTranscript } from './emoji-transcript';
 import { Graphs } from './graphs';
 import { Transcript } from './transcript';
 
+const debug = false;
+
 interface S {
   transcriptMonitor: TranscriptMonitor;
   speakerDetector: SpeakerDetector;
@@ -24,7 +26,7 @@ export class App extends Component<{}, S> {
       lastUpdate: new Date(),
       showTranscript: true
     };
-    this.state.transcriptMonitor.addListener(speech => console.log(speech));
+    if (debug) this.state.transcriptMonitor.addListener(speech => console.log(speech));
     this.state.transcriptMonitor.addListener(() => this.setState({ lastUpdate: new Date() }));
   }
 

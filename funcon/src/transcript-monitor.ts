@@ -1,5 +1,7 @@
 import { defaultTranscript } from '../conversation';
 
+const debug = false;
+
 function createSpeechRecognition(): SpeechRecognition {
   // @ts-ignore
   return new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -28,7 +30,7 @@ export class TranscriptMonitor {
     this.recognition.continuous = false;
     this.recognition.maxAlternatives = 1;
     this.recognition.onstart = () => (this.isListening = true);
-    this.recognition.onerror = event => this.log('onerror', event);
+    this.recognition.onerror = event => console.error('recognition.onerror', event);
     this.recognition.onresult = event => this.recordResult(event);
     this.recognition.onend = () =>
       this.continueListening ? this.recognition.start() : (this.isListening = false);
@@ -52,7 +54,7 @@ export class TranscriptMonitor {
     const male = this.speakerCounts.get(0) || 0;
     const female = this.speakerCounts.get(1) || 0;
     const ratio = female / (male + female || -1);
-    console.log(ratio.toFixed(3));
+    if (debug) console.log('female / total ratio', ratio.toFixed(3), male, female);
     // const topSpeaker = maxBy([...this.speakerCounts.entries()], ([, count]) => count);
     // if (!topSpeaker) return -1;
     return ratio > 0.18 ? 1 : 0;
@@ -76,11 +78,6 @@ export class TranscriptMonitor {
   stop() {
     this.recognition.stop();
     this.continueListening = false;
-  }
-
-  private log(msg, ...args) {
-    console.log(` - ${msg}`, ...args);
-    return true;
   }
 
   recordSpeakers(speakers: Set<number>) {
