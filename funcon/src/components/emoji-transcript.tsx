@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash';
-import emoji from 'node-emoji';
 import React from 'react';
+import { findEmoji } from '../lib/emojis';
 import { TranscriptMonitor } from '../transcript-monitor';
 
 interface P {
@@ -12,10 +12,8 @@ export function EmojiTranscript({ montior }: P) {
     .map(s => s.transcript.split(' '))
     .reverse()
     .flat()
-    .map(s => s.toLocaleLowerCase())
-    .filter(emoji.hasEmoji)
-    .map<any>(emoji.find)
-    .map(pair => pair.emoji);
+    .map(findEmoji)
+    .filter(Boolean) as string[];
 
   const wordCount = new Map<string, number>();
   words.forEach(word => wordCount.set(word, (wordCount.get(word) || 0) + 1));

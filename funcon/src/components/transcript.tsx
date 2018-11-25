@@ -1,5 +1,5 @@
-import emoji from 'node-emoji';
 import React from 'react';
+import { findEmoji } from '../lib/emojis';
 import { TranscriptMonitor } from '../transcript-monitor';
 
 interface P {
@@ -22,9 +22,8 @@ function emojifyText(text: string) {
   return text
     .split(' ')
     .map(s => {
-      return emoji.hasEmoji(s.toLocaleLowerCase())
-        ? `${emoji.find(s.toLocaleLowerCase()).emoji} (${s})`
-        : s;
+      const emoji = findEmoji(s);
+      return emoji ? `${emoji} (${s})` : s;
     })
     .join(' ');
 }
