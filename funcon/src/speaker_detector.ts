@@ -90,7 +90,7 @@ export class SpeakerDetector {
         throw new Error('Cannot get a context of canvas ' + name);
       }
 
-      const expectedWidth = window.innerWidth >> 1;
+      const expectedWidth = canvas.clientWidth;
       if (shouldClear || canvas.width != expectedWidth) {
         // Clear the canvas [sic!].
         canvas.width = expectedWidth;
@@ -119,30 +119,29 @@ export class SpeakerDetector {
       fft = getCanvasAndContext('fft', true),
       imprint = getCanvasAndContext('imprint', false);
 
+    pcm.ctx.beginPath();
     pcmData.forEach((value, index) =>
       pcm.ctx.lineTo((pcm.el.width / pcmData.length) * index, ((value + 1) / 2) * pcm.el.height)
     );
     pcm.ctx.stroke();
 
-    this.imprintIndex += this.imprintDirection;
-    if (this.imprintIndex < 0) {
-      this.imprintIndex = 0;
+    if (this.imprintIndex <= 0) {
       this.imprintDirection = 1;
-    } else if (this.imprintIndex > 500) {
+    } else if (this.imprintIndex >= imprint.el.width) {
       this.imprintDirection = -1;
     }
+    this.imprintIndex += this.imprintDirection;
     if (imprint.el.height != fftData.length) {
       imprint.el.height = fftData.length;
     }
+
     const fftBarWidth = fft.el.width / fftData.length,
       fftTickStep = Math.floor(50 / fftBarWidth);
 
     const fffft = fourierTransform(
       fftData.slice(0, Math.pow(2, Math.floor(Math.log2(fftData.length))))
     ) as number[];
-
     const sorted4ft = fffft.map((v, index) => [v, index]).sort((v1, v2) => v2[0] - v1[0]);
-
     let speaker = -1;
     for (let i = 0; i < sorted4ft.length / 8; ++i) {
       if (sorted4ft[i][0] > 0.04) {
@@ -158,6 +157,7 @@ export class SpeakerDetector {
       fffft.push(0);
     }
 
+    fft.ctx.beginPath();
     fftData.forEach((value, index) => {
       const y = fft.el.height * (1 - value);
       fft.ctx.lineTo(fftBarWidth * index, y);
@@ -169,6 +169,12 @@ export class SpeakerDetector {
       setPixel(imprint.ctx, this.imprintIndex, index, fftData[index] * 4);
     });
     fft.ctx.stroke();
+
+    imprint.ctx.lineWidth = 2;
+    imprint.ctx.beginPath();
+    imprint.ctx.moveTo(this.imprintIndex + this.imprintDirection * 3, 0);
+    imprint.ctx.lineTo(this.imprintIndex + this.imprintDirection * 3, imprint.el.height);
+    imprint.ctx.stroke();
 
     setPixel(imprint.ctx, this.imprintIndex, 0, (speaker + 1) / 4);
 
