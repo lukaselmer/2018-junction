@@ -4,7 +4,18 @@ const debug = false;
 
 function createSpeechRecognition(): SpeechRecognition {
   // @ts-ignore
-  return new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  return new (window.SpeechRecognition || window.webkitSpeechRecognition || SpeechRecognitionMock)();
+}
+
+class SpeechRecognitionMock {
+  continuous: any;
+  maxAlternatives: any;
+  onstart: any;
+  onerror: any;
+  onresult: any;
+  onend: any;
+  start() {}
+  stop() {}
 }
 
 export interface Speech {
