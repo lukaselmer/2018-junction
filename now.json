@@ -2,7 +2,7 @@
   "version": 2,
   "name": "funcon",
   "regions": ["bru"],
-  "alias": ["funcon.now.sh"],
+  "alias": ["fun-con"],
   "builds": [{ "src": "funcon/package.json", "use": "@now/static-build" }],
   "routes": [{ "src": "^/(.*)", "dest": "/funcon/$1" }, { "src": ".*", "dest": "/funcon/index.html" }]
 }
