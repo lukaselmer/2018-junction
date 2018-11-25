@@ -5,6 +5,6 @@
     { "src": "funcon/package.json", "use": "@now/static-build" }
   ],
   "routes": [
-    { "src": "/*", "dest": "/funcon"}
+    { "src": "*", "dest": "funcon"}
   ]
 }
